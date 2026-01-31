@@ -140,13 +140,7 @@ export function navegarA(ruta: string) {
     rutaNormalizada = '/';
   }
 
-  // Evitar navegación a la misma ruta
-  if (window.location.pathname === rutaNormalizada) {
-    console.log('⏸️ Misma ruta, ignorando');
-    return;
-  }
-
-  // Actualizar URL
+  // Actualizar URL (aunque sea la misma, recargar el contenido)
   console.log('📍 Actualizando URL a:', rutaNormalizada);
   window.history.pushState({ ruta: rutaNormalizada }, '', rutaNormalizada);
 
