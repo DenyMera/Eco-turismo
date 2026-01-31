@@ -4,7 +4,8 @@
 // IMPORTANTE: Mantenemos las rutas relativas originales
 import { supabase } from "../services/supabase.js";
 // La ruta correcta hacia idiomas.js (está en la misma carpeta que comunes.ts)
-import { obtenerTraduccion } from "./idiomas.js"; 
+import { obtenerTraduccion } from "./idiomas.js";
+import { navegarA } from "../router.js"; 
 
 /**
  * Inicializa el estado de sesión en la cabecera (login/registro vs perfil/cerrar sesión)
@@ -70,7 +71,7 @@ export async function inicializarSesionUI() {
 				try {
 					await supabase.auth.signOut();
 				} finally {
-					window.location.href = '/index.html';
+					navegarA('/');
 				}
 			});
 		}
@@ -208,49 +209,46 @@ export function inicializarAtajosTeclado() {
 			case '1': // Alt + 1 (Inicio)
 				e.preventDefault();
 				console.log('⌨️ Atajo: Alt + 1 → Ir a Inicio');
-				window.location.href = '/index.html';
-				break;
-
-			case '2': // Alt + 2 (Rutas)
+			navegarA('/');
 				e.preventDefault();
 				console.log('⌨️ Atajo: Alt + 2 → Ir a Rutas');
-				window.location.href = '/pages/rutas.html';
+				navegarA('/rutas');
 				break;
 				
 			case '3': // Alt + 3 (Novedades)
 				e.preventDefault();
 				console.log('⌨️ Atajo: Alt + 3 → Ir a Novedades');
-				window.location.href = '/pages/novedades.html';
+				navegarA('/novedades');
 				break;
 				
 			case '4': // Alt + 4 (Ayuda)
 				e.preventDefault();
 				console.log('⌨️ Atajo: Alt + 4 → Ir a Ayuda');
-				window.location.href = '/pages/ayuda.html';
+				navegarA('/ayuda');
 				break;
 			
 			case 'p': // Alt + P (Perfil)
 				e.preventDefault();
 				console.log('⌨️ Atajo: Alt + P → Ir a Perfil');
-				window.location.href = '/pages/perfil.html';
+				navegarA('/perfil');
 				break;
 				
 			case 'l': // Alt + L (Login)
 				e.preventDefault();
 				console.log('⌨️ Atajo: Alt + L → Ir a Iniciar Sesión');
-				window.location.href = '/pages/login.html';
+				navegarA('/login');
 				break;
 
 			case 'g': // Alt + G (Buscar/Enfoque)
 				e.preventDefault();
 				console.log('⌨️ Atajo: Alt + G → Buscar Rutas');
-				if (window.location.pathname.includes('/pages/rutas.html')) {
+				if (window.location.pathname.includes('/rutas')) {
 					const searchInput = document.getElementById('busqueda-rutas') as HTMLInputElement;
 					if (searchInput) {
 						searchInput.focus();
 					}
 				} else {
-					window.location.href = '/pages/rutas.html';
+					navegarA('/rutas');
 				}
 				break;
 				
