@@ -209,46 +209,49 @@ export function inicializarAtajosTeclado() {
 			case '1': // Alt + 1 (Inicio)
 				e.preventDefault();
 				console.log('⌨️ Atajo: Alt + 1 → Ir a Inicio');
-			navegarA('/');
+				navegarA('/');
+				break;
+
+			case '2': // Alt + 2 (Rutas)
 				e.preventDefault();
 				console.log('⌨️ Atajo: Alt + 2 → Ir a Rutas');
-				navegarA('/rutas');
+				navegarA('/pages/rutas.html');
 				break;
 				
 			case '3': // Alt + 3 (Novedades)
 				e.preventDefault();
 				console.log('⌨️ Atajo: Alt + 3 → Ir a Novedades');
-				navegarA('/novedades');
+				navegarA('/pages/novedades.html');
 				break;
 				
 			case '4': // Alt + 4 (Ayuda)
 				e.preventDefault();
 				console.log('⌨️ Atajo: Alt + 4 → Ir a Ayuda');
-				navegarA('/ayuda');
+				navegarA('/pages/ayuda.html');
 				break;
 			
 			case 'p': // Alt + P (Perfil)
 				e.preventDefault();
 				console.log('⌨️ Atajo: Alt + P → Ir a Perfil');
-				navegarA('/perfil');
+				navegarA('/pages/perfil.html');
 				break;
 				
 			case 'l': // Alt + L (Login)
 				e.preventDefault();
 				console.log('⌨️ Atajo: Alt + L → Ir a Iniciar Sesión');
-				navegarA('/login');
+				navegarA('/pages/login.html');
 				break;
 
 			case 'g': // Alt + G (Buscar/Enfoque)
 				e.preventDefault();
 				console.log('⌨️ Atajo: Alt + G → Buscar Rutas');
-				if (window.location.pathname.includes('/rutas')) {
+				if (window.location.pathname.includes('/pages/rutas.html')) {
 					const searchInput = document.getElementById('busqueda-rutas') as HTMLInputElement;
 					if (searchInput) {
 						searchInput.focus();
 					}
 				} else {
-					navegarA('/rutas');
+					navegarA('/pages/rutas.html');
 				}
 				break;
 				
