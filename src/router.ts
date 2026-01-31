@@ -109,8 +109,8 @@ async function cargarYMostrarPagina(ruta: string) {
 async function reinicializarPagina() {
   // Importar y ejecutar funciones de inicialización
   try {
-    const { inicializarSesionUI, inicializarTema } = await import('/src/scripts/comunes.ts');
-    const { inicializarIdiomas, inicializarAccesibilidad } = await import('/src/scripts/idiomas.js');
+    const { inicializarSesionUI, inicializarTema } = await import('./scripts/comunes.ts');
+    const { inicializarIdiomas, inicializarAccesibilidad } = await import('./scripts/idiomas.js');
     
     inicializarTema();
     inicializarIdiomas();
@@ -125,8 +125,8 @@ async function reinicializarPagina() {
  * Intercepta clics en enlaces para navegación del cliente
  */
 export function inicializarInterceptoresEnlaces() {
-  document.addEventListener('click', (e) => {
-    const link = (e.target as HTMLElement).closest('a');
+  document.addEventListener('click', (event) => {
+    const link = (event.target as HTMLElement).closest('a');
     
     if (!link) return;
 
@@ -135,7 +135,7 @@ export function inicializarInterceptoresEnlaces() {
 
     // Si es un enlace a una página interna (SPA)
     if (href.startsWith('/pages/') || href.startsWith('/')) {
-      e.preventDefault();
+      event.preventDefault();
       
       // Convertir rutas de /pages/login.html a /login
       let ruta = href;
@@ -154,7 +154,7 @@ export function inicializarInterceptoresEnlaces() {
  * Maneja el botón atrás/adelante del navegador
  */
 export function inicializarNavegacionHistorial() {
-  window.addEventListener('popstate', (e) => {
+  window.addEventListener('popstate', () => {
     const ruta = window.location.pathname;
     cargarYMostrarPagina(ruta);
   });
