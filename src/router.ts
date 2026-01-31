@@ -59,12 +59,18 @@ async function reinicializarPagina() {
  * Carga y muestra el contenido de una ruta
  */
 async function mostrarRuta(ruta: string) {
+  console.log('📥 Mostrando ruta:', ruta);
+  
   if (!contenedorPrincipal) {
     contenedorPrincipal = document.querySelector('main.contenido');
-    if (!contenedorPrincipal) return;
+    if (!contenedorPrincipal) {
+      console.error('❌ No se encontró el contenedor main.contenido');
+      return;
+    }
   }
 
   const archivo = rutasMap[ruta] || '/index.html';
+  console.log('📂 Archivo a cargar:', archivo);
   
   // Si es la página de inicio, recargar (tiene scripts especiales)
   if (ruta === '/' || ruta === '/index.html') {
@@ -77,7 +83,10 @@ async function mostrarRuta(ruta: string) {
 
   // Obtener HTML
   const html = await obtenerPagina(archivo);
+  console.log('✅ HTML obtenido, longitud:', html.length);
+  
   const contenido = extraerContenidoMain(html);
+  console.log('📋 Contenido extraído, longitud:', contenido.length);
 
   // Mostrar contenido
   contenedorPrincipal.innerHTML = contenido;
@@ -145,10 +154,14 @@ function inicializarHistorial() {
  */
 function cargarRutaActual() {
   const ruta = window.location.pathname;
+  console.log('🔍 Ruta actual detectada:', ruta);
   
   // Si no es la página de inicio, cargar contenido dinámico
   if (ruta !== '/' && ruta !== '/index.html') {
+    console.log('📄 Cargando contenido para:', ruta);
     mostrarRuta(ruta);
+  } else {
+    console.log('🏠 Página de inicio');
   }
 }
 
@@ -156,8 +169,10 @@ function cargarRutaActual() {
  * Inicializa el router
  */
 export function inicializarRouter() {
+  console.log('🚀 Inicializando router...');
   inicializarInterceptoresEnlaces();
   inicializarHistorial();
   cargarRutaActual();
+  console.log('✅ Router inicializado');
 }
 
