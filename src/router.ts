@@ -55,7 +55,6 @@ function extraerContenidoMain(html: string): string {
     // Remover elementos que no queremos mostrar (header, footer, etc)
     const header = bodyCopy.querySelector('header');
     const footer = bodyCopy.querySelector('footer');
-    const nav = bodyCopy.querySelector('nav');
     
     if (header) {
       console.log('🗑️ Removiendo header duplicado');
