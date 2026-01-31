@@ -250,7 +250,6 @@
   <script type="module">
     import { inicializarTema, actualizarAnio, inicializarMenu, inicializarSesionUI, inicializarAtajosTeclado } from "/src/scripts/comunes.ts";
     import { inicializarIdiomas, inicializarAccesibilidad } from "/src/scripts/idiomas.js";
-    import { inicializarRouter } from "/src/router.ts";
 
     document.addEventListener("DOMContentLoaded", () => {
       inicializarTema();
@@ -260,7 +259,6 @@
       inicializarAccesibilidad();
       inicializarSesionUI();
       inicializarAtajosTeclado();
-      inicializarRouter();
     });
   </script>
 </body>
