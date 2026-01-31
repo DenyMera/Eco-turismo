@@ -102,18 +102,25 @@ async function mostrarRuta(ruta: string) {
  * Navega a una ruta
  */
 export function navegarA(ruta: string) {
+  console.log('🧭 navegarA() llamado con:', ruta);
+  
   // Convertir /pages/login.html a /login
   let rutaNormalizada = ruta;
   if (ruta.startsWith('/pages/')) {
     rutaNormalizada = '/' + ruta.replace('/pages/', '').replace('.html', '');
+    console.log('✏️ Ruta normalizada:', rutaNormalizada);
   } else if (ruta === '/index.html') {
     rutaNormalizada = '/';
   }
 
   // Evitar navegación a la misma ruta
-  if (window.location.pathname === rutaNormalizada) return;
+  if (window.location.pathname === rutaNormalizada) {
+    console.log('⏸️ Misma ruta, ignorando');
+    return;
+  }
 
   // Actualizar URL
+  console.log('📍 Actualizando URL a:', rutaNormalizada);
   window.history.pushState({ ruta: rutaNormalizada }, '', rutaNormalizada);
 
   // Cargar contenido
@@ -125,16 +132,29 @@ export function navegarA(ruta: string) {
  */
 function inicializarInterceptoresEnlaces() {
   document.addEventListener('click', (event) => {
+    console.log('🖱️ Clic detectado');
+    
     const link = (event.target as HTMLElement).closest('a');
-    if (!link) return;
+    if (!link) {
+      console.log('❌ No es un enlace');
+      return;
+    }
 
     const href = link.getAttribute('href');
-    if (!href) return;
+    console.log('🔗 href:', href);
+    
+    if (!href) {
+      console.log('❌ Sin href');
+      return;
+    }
 
     // Si es un enlace interno
     if (href.startsWith('/') && !href.includes('://')) {
+      console.log('✅ Enlace interno detectado:', href);
       event.preventDefault();
       navegarA(href);
+    } else {
+      console.log('⏭️ Enlace externo, ignorando');
     }
   });
 }
