@@ -41,8 +41,8 @@ Sistema web para la gestión y exploración de rutas eco-turísticas comunitaria
 
 ### 1. Clonar el Repositorio
 ```bash
-git clone https://github.com/tu-usuario/rutas-eco-comunitarias.git
-cd rutas-eco-comunitarias
+git clone https://github.com/eturismo318-code/Eco-turismo.git
+
 ```
 
 ### 2. Instalar Dependencias
@@ -112,44 +112,6 @@ mi-inicio/
 └── README.md                      # Este archivo
 ```
 
-## 🔧 Configuración de Base de Datos
-
-### Esquema Principal
-
-#### Tabla `rutas`
-- **id**: Identificador único
-- **nombre**: Nombre de la ruta
-- **descripcion**: Descripción detallada
-- **imagen_url**: URL de la imagen principal
-- **dificultad**: Nivel de dificultad (fácil, media, difícil)
-- **duracion_horas**: Duración en horas
-- **distancia_km**: Distancia en kilómetros
-- **ubicacion**: Ubicación geográfica
-- **tipo**: Tipo de ruta (senderismo, ciclismo, etc.)
-- **puntuacion**: Puntuación de 0 a 5
-- **activa**: Estado activo/inactivo
-- **creado_por**: ID del usuario creador
-- **fecha_creacion**: Fecha de creación
-- **fecha_actualizacion**: Fecha de última actualización
-
-#### Tabla `puntos_ecologicos`
-- **id**: Identificador único
-- **ruta_id**: ID de la ruta relacionada
-- **nombre**: Nombre del punto
-- **descripcion**: Descripción del punto
-- **latitud**: Coordenada de latitud
-- **longitud**: Coordenada de longitud
-- **orden**: Orden de visita
-- **fecha_creacion**: Fecha de creación
-
-#### Tabla `usuarios_perfiles`
-- **id**: ID del usuario (referencia a auth.users)
-- **nombre**: Nombre del usuario
-- **apellido**: Apellido del usuario
-- **rol**: Rol del usuario (cliente, administrador)
-- **telefono**: Teléfono de contacto
-- **fecha_registro**: Fecha de registro
-- **activo**: Estado activo/inactivo
 
 ## 👥 Roles y Permisos
 
@@ -276,17 +238,10 @@ Este proyecto está bajo la Licencia MIT. Ver el archivo `LICENSE` para más det
 
 ## 👥 Equipo
 
-- **Desarrollo Frontend**: [Tu Nombre]
-- **Desarrollo Backend**: [Compañero]
-- **Diseño UX/UI**: [Diseñador]
-- **Testing**: [Tester]
-
-## 📞 Soporte
-
-Para soporte técnico o preguntas:
-- 📧 Email: soporte@rutas-eco.com
-- 💬 Discord: [Servidor del proyecto]
-- 📖 Documentación: [Enlace a docs]
+- **Desarrollo Frontend**: [Deny mera, Javier zamora]
+- **Desarrollo Backend**: [Deny mera, Javier zamora]
+- **Diseño UX/UI**: [Deny mera, Javier zamora]
+- **Testing**: [Deny mera, Javier zamora]
 
 ## 🔄 Changelog
 

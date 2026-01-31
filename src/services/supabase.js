@@ -1,10 +1,8 @@
 /**
  * 🔗 Servicio de Supabase para Rutas Eco-Comunitarias
- * 
- * Este archivo contiene todas las funciones para interactuar con la base de datos
+ * * Este archivo contiene todas las funciones para interactuar con la base de datos
  * de Supabase. Incluye funciones para clientes (ver rutas) y administradores (gestionar rutas).
- * 
- * @author Sistema Rutas Eco-Comunitarias
+ * * @author Sistema Rutas Eco-Comunitarias
  * @version 1.0.0
  */
 
@@ -28,7 +26,7 @@ if (!supabaseUrl || !supabaseKey) {
   `)
 }
 
-// Crear cliente de Supabase
+// Crear cliente de Supabase (sin opciones de persistencia explícitas)
 export const supabase = createClient(supabaseUrl, supabaseKey)
 
 /**
@@ -45,8 +43,73 @@ export const supabase = createClient(supabaseUrl, supabaseKey)
  * @param {string} filtros.distancia - Filtro por distancia
  * @returns {Promise<Object>} - Objeto con data y error
  */
+/**
+ * Obtiene el plan del usuario actual
+ * @returns {Promise<string>} - 'basico' o 'pro'
+ */
+export async function obtenerPlanUsuario() {
+  try {
+    const user = await obtenerUsuarioActual()
+    if (!user) {
+      return 'basico' // Por defecto, usuarios no autenticados tienen plan básico
+    }
+
+    const { data, error } = await supabase
+      .from('usuarios_perfiles')
+      .select('plan')
+      .eq('id', user.id)
+      .single()
+
+    if (error || !data) {
+      return 'basico' // Por defecto si hay error
+    }
+
+    return data.plan || 'basico'
+  } catch (error) {
+    console.error('Error al obtener plan del usuario:', error)
+    return 'basico'
+  }
+}
+
+/**
+ * Actualiza el plan del usuario
+ * @param {string} nuevoPlan - 'basico' o 'pro'
+ * @returns {Promise<Object>} - Objeto con data y error
+ */
+export async function actualizarPlanUsuario(nuevoPlan) {
+  try {
+    const user = await obtenerUsuarioActual()
+    if (!user) {
+      return { data: null, error: new Error('No estás autenticado') }
+    }
+
+    if (nuevoPlan !== 'basico' && nuevoPlan !== 'pro') {
+      return { data: null, error: new Error('Plan inválido. Debe ser "basico" o "pro"') }
+    }
+
+    const { data, error } = await supabase
+      .from('usuarios_perfiles')
+      .update({ plan: nuevoPlan })
+      .eq('id', user.id)
+      .select()
+
+    if (error) {
+      console.error('Error al actualizar plan:', error)
+      return { data: null, error }
+    }
+
+    return { data, error: null }
+  } catch (error) {
+    console.error('Error inesperado al actualizar plan:', error)
+    return { data: null, error }
+  }
+}
+
 export async function obtenerRutasFiltradas(filtros = {}) {
   try {
+    // Obtener plan del usuario actual
+    const planUsuario = await obtenerPlanUsuario()
+    
     let query = supabase
       .from('rutas')
       .select(`
@@ -59,9 +122,18 @@ export async function obtenerRutasFiltradas(filtros = {}) {
         distancia_km,
         ubicacion,
         tipo,
-        puntuacion
+        puntuacion,
+        plan,
+        latitud_inicio,
+        longitud_inicio,
+        latitud_fin,
+        longitud_fin
       `)
       .eq('activa', true)
+      
+    // NOTA: No filtramos por plan aquí porque queremos mostrar todas las rutas
+    // (incluidas las Pro) para que los usuarios básicos las vean con candado
+    // El filtro real se hace en el frontend
 
     // Aplicar filtros de búsqueda
     if (filtros.busqueda) {
@@ -98,7 +170,7 @@ export async function obtenerRutasFiltradas(filtros = {}) {
 
     // Ordenar por puntuación y fecha
     query = query.order('puntuacion', { ascending: false })
-                .order('fecha_creacion', { ascending: false })
+                  .order('fecha_creacion', { ascending: false })
 
     const { data, error } = await query
 
@@ -124,7 +196,7 @@ export async function obtenerRutaCompleta(rutaId) {
     // Obtener datos de la ruta
     const { data: ruta, error: errorRuta } = await supabase
       .from('rutas')
-      .select('*')
+      .select('*, plan')
       .eq('id', rutaId)
       .eq('activa', true)
       .single()
@@ -199,7 +271,8 @@ export async function obtenerSugerencias(termino) {
         ubicacion,
         dificultad,
         duracion_horas,
-        distancia_km
+        distancia_km,
+        plan
       `)
       .eq('activa', true)
       .or(`nombre.ilike.%${termino}%,ubicacion.ilike.%${termino}%`)
@@ -214,6 +287,84 @@ export async function obtenerSugerencias(termino) {
     return { data, error: null }
   } catch (error) {
     console.error('Error inesperado al obtener sugerencias:', error)
+    return { data: null, error }
+  }
+}
+
+/**
+ * 💾 Guarda una ruta como favorita para el usuario actual
+ * Tabla sugerida en Supabase: rutas_favoritas (id, usuario_id, ruta_id, creada_en)
+ * @param {number} rutaId - ID de la ruta a guardar
+ */
+export async function guardarRutaFavorita(rutaId) {
+  try {
+    const { data: { user }, error: authError } = await supabase.auth.getUser()
+    if (authError || !user) {
+      return { data: null, error: new Error('Debes iniciar sesión para guardar rutas') }
+    }
+
+    const { data, error } = await supabase
+      .from('rutas_favoritas')
+      .upsert(
+        { usuario_id: user.id, ruta_id: rutaId },
+        { onConflict: 'usuario_id,ruta_id' }
+      )
+      .select()
+
+    if (error) {
+      console.error('Error al guardar ruta favorita:', error)
+      return { data: null, error }
+    }
+
+    return { data, error: null }
+  } catch (error) {
+    console.error('Error inesperado al guardar ruta favorita:', error)
+    return { data: null, error }
+  }
+}
+
+/**
+ * 📥 Obtiene las rutas favoritas del usuario actual
+ * Requiere una vista o relación en Supabase que una rutas_favoritas con rutas.
+ */
+export async function obtenerRutasFavoritasUsuario() {
+  try {
+    const { data: { user }, error: authError } = await supabase.auth.getUser()
+    if (authError || !user) {
+      return { data: [], error: new Error('No autenticado') }
+    }
+
+    const { data, error } = await supabase
+      .from('rutas_favoritas')
+      .select(`
+        ruta:ruta_id (
+          id,
+          nombre,
+          descripcion,
+          imagen_url,
+          dificultad,
+          duracion_horas,
+          distancia_km,
+          ubicacion,
+          tipo,
+          puntuacion,
+          plan
+        )
+      `)
+      .eq('usuario_id', user.id)
+
+    if (error) {
+      console.error('Error al obtener rutas favoritas:', error)
+      return { data: null, error }
+    }
+
+    const rutas = (data || []).map(fav => convertirRutaFormato({
+      ...fav.ruta
+    }))
+
+    return { data: rutas, error: null }
+  } catch (error) {
+    console.error('Error inesperado al obtener rutas favoritas:', error)
     return { data: null, error }
   }
 }
@@ -249,22 +400,37 @@ export async function obtenerUsuarioActual() {
 export async function esAdministrador() {
   try {
     const user = await obtenerUsuarioActual()
-    if (!user) return false
+    if (!user) {
+      console.log('❌ No hay usuario autenticado')
+      return false
+    }
+
+    console.log('🔍 Verificando rol para usuario:', user.id)
 
     const { data, error } = await supabase
       .from('usuarios_perfiles')
-      .select('rol')
+      .select('rol, nombre, apellido')
       .eq('id', user.id)
       .single()
 
     if (error) {
-      console.error('Error al verificar rol:', error)
+      console.error('❌ Error al verificar rol:', error)
+      console.error('Detalles del error:', {
+        code: error.code,
+        message: error.message,
+        details: error.details,
+        hint: error.hint
+      })
       return false
     }
 
-    return data?.rol === 'administrador'
+    console.log('📋 Perfil encontrado:', data)
+    const esAdmin = data?.rol === 'administrador'
+    console.log('🎭 Rol:', data?.rol, '| Es administrador:', esAdmin)
+    
+    return esAdmin
   } catch (error) {
-    console.error('Error inesperado al verificar rol:', error)
+    console.error('❌ Error inesperado al verificar rol:', error)
     return false
   }
 }
@@ -281,7 +447,7 @@ export async function obtenerTodasLasRutas() {
   try {
     const { data, error } = await supabase
       .from('rutas')
-      .select('*')
+      .select('*, plan')
       .order('fecha_creacion', { ascending: false })
 
     if (error) {
@@ -458,7 +624,16 @@ export function convertirRutaFormato(rutaDB) {
     ubicacion: rutaDB.ubicacion,
     tipo: rutaDB.tipo,
     puntuacion: rutaDB.puntuacion,
-    puntosEco: rutaDB.puntosEco || []
+    plan: rutaDB.plan || 'basico',
+    puntosEco: rutaDB.puntosEco || [],
+    coordenadasInicio: rutaDB.latitud_inicio && rutaDB.longitud_inicio ? {
+      lat: rutaDB.latitud_inicio,
+      lng: rutaDB.longitud_inicio
+    } : null,
+    coordenadasFin: rutaDB.latitud_fin && rutaDB.longitud_fin ? {
+      lat: rutaDB.latitud_fin,
+      lng: rutaDB.longitud_fin
+    } : null
   }
 }
 
@@ -486,4 +661,60 @@ export function manejarErrorSupabase(error) {
   }
   
   return 'Error de conexión con la base de datos'
+}
+
+/**
+ * 📤 Sube una imagen a Supabase Storage
+ * @param {File} archivo - Archivo de imagen a subir
+ * @param {number} rutaId - ID de la ruta (opcional)
+ * @returns {Promise<Object>} - Objeto con url y error
+ */
+export async function subirImagenRuta(archivo, rutaId = null) {
+  try {
+    const { data: { user }, error: authError } = await supabase.auth.getUser()
+    if (authError || !user) {
+      return { url: null, error: new Error('Debes iniciar sesión para subir imágenes') }
+    }
+
+    // Validar tipo de archivo
+    const tiposPermitidos = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp']
+    if (!tiposPermitidos.includes(archivo.type)) {
+      return { url: null, error: new Error('Tipo de archivo no permitido. Use JPG, PNG o WEBP') }
+    }
+
+    // Validar tamaño (máximo 5MB)
+    const maxSize = 5 * 1024 * 1024
+    if (archivo.size > maxSize) {
+      return { url: null, error: new Error('La imagen es demasiado grande. Máximo 5MB') }
+    }
+
+    // Generar nombre único
+    const timestamp = Date.now()
+    const nombreArchivo = rutaId 
+      ? `rutas/${rutaId}/${timestamp}-${archivo.name}`
+      : `rutas/temporal/${user.id}-${timestamp}-${archivo.name}`
+
+    // Subir archivo
+    const { data, error } = await supabase.storage
+      .from('rutas-imagenes')
+      .upload(nombreArchivo, archivo, {
+        cacheControl: '3600',
+        upsert: false
+      })
+
+    if (error) {
+      console.error('Error al subir imagen:', error)
+      return { url: null, error }
+    }
+
+    // Obtener URL pública
+    const { data: urlData } = supabase.storage
+      .from('rutas-imagenes')
+      .getPublicUrl(data.path)
+
+    return { url: urlData?.publicUrl || null, error: null }
+  } catch (error) {
+    console.error('Error inesperado al subir imagen:', error)
+    return { url: null, error }
+  }
 }

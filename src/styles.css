@@ -92,20 +92,19 @@ button { font-family: inherit; cursor: pointer; }
 /* ---------------------------------------------------------
    🧭 CABECERA (barra superior)
    --------------------------------------------------------- */
-.cabecera {
-  position: sticky;
-  top: 0;
-  z-index: 50;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: var(--gap);
-  padding: 0.75rem 1rem;
-  background: linear-gradient(180deg, rgba(255,255,255,0.8), rgba(255,255,255,0.55));
-  backdrop-filter: blur(6px);
-  border-bottom: 1px solid rgba(0,0,0,0.06);
-  box-shadow: var(--shadow-sm);
-}
+/* ---------------------------------------------------------
+   🧭 CABECERA (barra superior)
+   --------------------------------------------------------- */
+   .cabecera {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: linear-gradient(180deg, rgba(255,255,255,0.8), rgba(255,255,255,0.55));
+    backdrop-filter: blur(6px);
+    border-bottom: 1px solid rgba(0,0,0,0.06);
+    box-shadow: var(--shadow-sm);
+    
+  }
 
 /* Cabecera en modo oscuro */
 :root[data-contraste="alto"] .cabecera {
@@ -246,7 +245,7 @@ button { font-family: inherit; cursor: pointer; }
    --------------------------------------------------------- */
 .hero {
   position: relative;
-  min-height: 80vh;
+  min-height: 60vh;
   display: flex;
   align-items: center;
   overflow: hidden;
@@ -424,17 +423,116 @@ button { font-family: inherit; cursor: pointer; }
 /* ---------------------------------------------------------
    ⚓ PIE DE PÁGINA
    --------------------------------------------------------- */
-.pie {
-  margin-top: 3rem;
-  border-top: 1px solid rgba(0,0,0,0.05);
-  padding: 1rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 1rem;
-  background: transparent;
-}
+/* =========================================================
+   👣 PIE DE PÁGINA PROFESIONAL
+   ========================================================= */
+
+   .pie-profesional {
+    /* Fondo oscuro para un look profesional */
+    background-color: #17202a; /* Color de texto principal oscuro */
+    color: #a1a8af; /* Color de texto suave (--muted en modo oscuro) */
+    padding-top: 3rem;
+    margin-top: 4rem; /* Buen espacio antes del footer */
+    border-top: 4px solid var(--primary); /* Línea verde superior */
+  }
+  
+  .pie-contenido {
+    display: grid;
+    /* Columnas responsivas: 4 en desktop, 2 en tablet, 1 en móvil */
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1rem;
+  }
+  
+  .pie-columna {
+    padding: 0 0.5rem;
+  }
+  
+  /* Columna de la marca (logo + nombre) */
+  .pie-columna--brand {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+  .pie-columna--brand .logo {
+    width: 50px;
+    height: 50px;
+    border-radius: 8px; /* Heredado de .logo */
+  }
+  .pie-columna--brand .nombre-sistema {
+    color: #fff; /* Texto blanco para el nombre */
+    font-size: 1.1rem;
+    margin: 0;
+  }
+  .pie-columna--brand p {
+    font-size: 0.9rem;
+    margin: 0;
+    line-height: 1.5;
+  }
+  
+  /* Columnas de enlaces */
+  .pie-columna h4 {
+    color: #fff;
+    font-size: 1rem;
+    font-weight: 600;
+    margin: 0 0 1rem 0;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  
+  .pie-columna ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+  
+  .pie-link {
+    color: #a1a8af;
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: color 0.2s ease, padding-left 0.2s ease;
+  }
+  
+  .pie-link:hover,
+  .pie-link:focus {
+    color: #fff;
+    padding-left: 4px;
+    text-decoration: underline;
+    outline-offset: 4px;
+  }
+  
+  /* Iconos de redes sociales */
+  .pie-sociales {
+    display: flex;
+    gap: 1rem;
+  }
+  .pie-social-link {
+    color: #a1a8af;
+    transition: color 0.2s ease, transform 0.2s ease;
+  }
+  .pie-social-link:hover,
+  .pie-social-link:focus {
+    color: #fff;
+    transform: scale(1.1);
+    outline-offset: 4px;
+  }
+  
+  /* Barra de copyright */
+  .pie-bottom-bar {
+    text-align: center;
+    padding: 1.5rem 1rem;
+    margin-top: 2rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  .pie-bottom-bar small {
+    font-size: 0.85rem;
+  }
+
 .pie small { color: var(--muted); }
 
 /* Pie en modo oscuro */
@@ -529,7 +627,7 @@ button { font-family: inherit; cursor: pointer; }
 
 /* Hero específico para rutas */
 .hero--rutas {
-  min-height: 50vh;
+  min-height: 20vh;
   background: linear-gradient(135deg, #2a7a5f 0%, #0d6b9a 100%);
 }
 
@@ -840,32 +938,301 @@ button { font-family: inherit; cursor: pointer; }
 }
 
 .badge {
-  padding: 0.25rem 0.75rem;
+  padding: 0.35rem 0.85rem;
   border-radius: 20px;
   font-size: 0.75rem;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.5px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
 }
 
 .badge--facil {
-  background: rgba(34, 197, 94, 0.1);
-  color: #16a34a;
+  background: #16a34a;
+  color: #ffffff;
+  font-weight: 700;
+  box-shadow: 0 2px 4px rgba(22, 163, 74, 0.3);
 }
 
 .badge--media {
-  background: rgba(251, 191, 36, 0.1);
-  color: #d97706;
+  background: #d97706;
+  color: #ffffff;
+  font-weight: 700;
+  box-shadow: 0 2px 4px rgba(217, 119, 6, 0.3);
 }
 
 .badge--dificil {
-  background: rgba(239, 68, 68, 0.1);
-  color: #dc2626;
+  background: #dc2626;
+  color: #ffffff;
+  font-weight: 700;
+  box-shadow: 0 2px 4px rgba(220, 38, 38, 0.3);
 }
 
 .badge--duracion {
-  background: rgba(59, 130, 246, 0.1);
-  color: #2563eb;
+  background: #1a1a1a;
+  color: #ffffff;
+  font-weight: 700;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.badge--pro {
+  background: linear-gradient(135deg, rgba(147, 51, 234, 0.2), rgba(59, 130, 246, 0.2));
+  color: #9333ea;
+  border: 1px solid rgba(147, 51, 234, 0.3);
+  font-weight: 700;
+  box-shadow: 0 2px 4px rgba(147, 51, 234, 0.2);
+}
+
+/* Estilos para rutas bloqueadas (Plan Pro) */
+.tarjeta-ruta--bloqueada {
+  position: relative;
+  opacity: 0.9;
+}
+
+.ruta-bloqueada-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  border-radius: var(--radius);
+  transition: opacity 0.3s ease;
+}
+
+.ruta-bloqueada-contenido {
+  text-align: center;
+  color: white;
+  padding: 2rem;
+  max-width: 300px;
+}
+
+.ruta-bloqueada-contenido svg {
+  margin: 0 auto 1rem;
+  color: #fbbf24;
+}
+
+.ruta-bloqueada-contenido h4 {
+  margin: 0 0 0.5rem 0;
+  font-size: 1.25rem;
+  color: white;
+}
+
+.ruta-bloqueada-contenido p {
+  margin: 0 0 1.5rem 0;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 0.9rem;
+}
+
+.ruta-bloqueada-contenido .boton {
+  background: var(--primary);
+  color: white;
+  border: none;
+}
+
+.ruta-bloqueada-contenido .boton:hover {
+  background: #1f5d49;
+  transform: translateY(-2px);
+}
+
+/* ---------------------------------------------------------
+   💎 ESTILOS PARA SECCIÓN DE PLAN
+   --------------------------------------------------------- */
+.perfil-seccion--plan {
+  background: linear-gradient(135deg, rgba(42, 122, 95, 0.05), rgba(13, 107, 154, 0.05));
+  border: 1px solid rgba(42, 122, 95, 0.2);
+  border-radius: var(--radius);
+  padding: 2rem;
+}
+
+.plan-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.plan-cargando {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  padding: 2rem;
+  color: var(--muted);
+}
+
+.plan-tarjeta {
+  background: var(--card);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  box-shadow: var(--shadow-sm);
+  border: 2px solid rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+}
+
+.plan-tarjeta--pro {
+  background: linear-gradient(135deg, rgba(147, 51, 234, 0.1), rgba(59, 130, 246, 0.1));
+  border-color: rgba(147, 51, 234, 0.3);
+  box-shadow: 0 4px 12px rgba(147, 51, 234, 0.15);
+}
+
+.plan-tarjeta--basico {
+  border-color: rgba(0, 0, 0, 0.1);
+}
+
+.plan-tarjeta-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.plan-icono {
+  width: 64px;
+  height: 64px;
+  border-radius: 12px;
+  background: rgba(42, 122, 95, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--primary);
+  flex-shrink: 0;
+}
+
+.plan-icono--pro {
+  background: linear-gradient(135deg, rgba(147, 51, 234, 0.2), rgba(59, 130, 246, 0.2));
+  color: #9333ea;
+}
+
+.plan-tarjeta-info {
+  flex: 1;
+}
+
+.plan-nombre {
+  margin: 0 0 0.25rem 0;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.plan-descripcion {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.badge--pro-plan {
+  background: linear-gradient(135deg, #9333ea, #3b82f6);
+  color: white;
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 700;
+  box-shadow: 0 2px 8px rgba(147, 51, 234, 0.3);
+  border: none;
+}
+
+.plan-opciones {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.boton-plan {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 1rem 1.5rem;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  border: 2px solid transparent;
+}
+
+.boton-plan--basico {
+  background: var(--card);
+  color: var(--text);
+  border-color: rgba(0, 0, 0, 0.1);
+}
+
+.boton-plan--basico:hover {
+  background: rgba(0, 0, 0, 0.05);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-sm);
+}
+
+.boton-plan--pro {
+  background: linear-gradient(135deg, #9333ea, #3b82f6);
+  color: white;
+  border: none;
+}
+
+.boton-plan--pro:hover {
+  background: linear-gradient(135deg, #7e22ce, #2563eb);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(147, 51, 234, 0.4);
+}
+
+.boton-plan.primario {
+  background: linear-gradient(135deg, #9333ea, #3b82f6);
+  color: white;
+  border: none;
+}
+
+.boton-plan.secundario {
+  background: var(--card);
+  color: var(--text);
+  border-color: rgba(0, 0, 0, 0.1);
+}
+
+.plan-beneficios {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 1.5rem;
+  background: rgba(0, 0, 0, 0.02);
+  border-radius: var(--radius);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.plan-beneficio {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: var(--text);
+  font-size: 0.9rem;
+}
+
+.plan-beneficio svg {
+  color: var(--primary);
+  flex-shrink: 0;
+}
+
+.plan-beneficio--pro {
+  color: #9333ea;
+}
+
+.plan-beneficio--pro svg {
+  color: #9333ea;
+}
+
+@media (max-width: 768px) {
+  .plan-opciones {
+    grid-template-columns: 1fr;
+  }
+  
+  .plan-tarjeta-header {
+    flex-wrap: wrap;
+  }
+  
+  .perfil-seccion--plan {
+    padding: 1.5rem;
+  }
 }
 
 .tarjeta-ruta__contenido {
@@ -1294,7 +1661,7 @@ button { font-family: inherit; cursor: pointer; }
 
 /* Hero específico para novedades */
 .hero--novedades {
-  min-height: 50vh;
+  min-height: 20vh;
   background: linear-gradient(135deg, #2a7a5f 0%, #0d6b9a 100%);
 }
 
@@ -1607,8 +1974,10 @@ button { font-family: inherit; cursor: pointer; }
    --------------------------------------------------------- */
 
 /* Hero específico para ayuda */
+/* Este es el banner principal de la página de ayuda. Le damos menos altura que el hero principal 
+   porque aquí no necesitamos tanto espacio, solo queremos dar la bienvenida de forma sencilla. */
 .hero--ayuda {
-  min-height: 50vh;
+  min-height: 20vh;
   background: linear-gradient(135deg, #2a7a5f 0%, #0d6b9a 100%);
 }
 
@@ -1624,12 +1993,15 @@ button { font-family: inherit; cursor: pointer; }
 }
 
 /* Navegación de ayuda */
+/* Esta barra permite navegar entre las diferentes secciones de ayuda (FAQ, guías, etc.)
+   La hice con un fondo claro para que se distinga bien del contenido principal. */
 .ayuda-navegacion {
   background: var(--card);
   border-bottom: 1px solid rgba(0,0,0,0.1);
   padding: 1rem 0;
 }
 
+/* Los tabs se pueden desbordar en móviles si hay muchos, por eso agregué overflow-x */
 .ayuda-tabs {
   display: flex;
   gap: 0.5rem;
@@ -1637,6 +2009,7 @@ button { font-family: inherit; cursor: pointer; }
   padding: 0.5rem 0;
 }
 
+/* Cada tab tiene un estilo sutil cuando está inactivo, y se resalta cuando se selecciona */
 .ayuda-tab {
   padding: 0.75rem 1.5rem;
   border: none;
@@ -1645,7 +2018,7 @@ button { font-family: inherit; cursor: pointer; }
   cursor: pointer;
   border-radius: 8px;
   transition: all 0.2s ease;
-  white-space: nowrap;
+  white-space: nowrap; /* Evita que el texto se corte en varias líneas */
   font-weight: 500;
 }
 
@@ -1654,21 +2027,25 @@ button { font-family: inherit; cursor: pointer; }
   color: var(--text);
 }
 
+/* Cuando un tab está activo, lo pintamos con el color principal para que sea obvio */
 .ayuda-tab.activo {
   background: var(--primary);
   color: white;
 }
 
 /* Contenido de ayuda */
+/* El contenido principal tiene bastante padding vertical para que respire bien */
 .ayuda-contenido {
   padding: 3rem 0;
   background: var(--bg);
 }
 
+/* Por defecto ocultamos todas las secciones, JavaScript se encargará de mostrar la activa */
 .ayuda-tab-content {
   display: none;
 }
 
+/* Cuando una sección tiene la clase 'activo', la mostramos */
 .ayuda-tab-content.activo {
   display: block;
 }
@@ -1680,6 +2057,8 @@ button { font-family: inherit; cursor: pointer; }
 }
 
 /* FAQ Grid */
+/* Las preguntas frecuentes se muestran en un grid que se adapta automáticamente.
+   En móviles se verán en una sola columna, y en pantallas más grandes se distribuyen mejor. */
 .faq-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -1687,6 +2066,7 @@ button { font-family: inherit; cursor: pointer; }
   margin-bottom: 3rem;
 }
 
+/* Cada pregunta se ve como una tarjeta con un ligero efecto de elevación */
 .faq-item {
   background: var(--card);
   padding: 2rem;
@@ -1695,6 +2075,7 @@ button { font-family: inherit; cursor: pointer; }
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
+/* Cuando pasas el mouse, la tarjeta se eleva un poco para dar feedback visual */
 .faq-item:hover {
   transform: translateY(-2px);
   box-shadow: var(--shadow-md);
@@ -1713,6 +2094,7 @@ button { font-family: inherit; cursor: pointer; }
 }
 
 /* Guías */
+/* Las secciones de guía tienen un diseño similar a las FAQ para mantener consistencia */
 .guia-seccion {
   margin-bottom: 2.5rem;
   background: var(--card);
@@ -1739,12 +2121,14 @@ button { font-family: inherit; cursor: pointer; }
 }
 
 /* Filtros guía */
+/* Las explicaciones de los filtros también van en un grid responsivo */
 .filtros-guia {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 2rem;
 }
 
+/* Cada explicación es una tarjeta con información sobre cómo usar los filtros */
 .filtro-explicacion {
   background: var(--card);
   padding: 2rem;
@@ -1775,6 +2159,7 @@ button { font-family: inherit; cursor: pointer; }
   line-height: 1.6;
 }
 
+/* Los ejemplos tienen un fondo ligeramente verde para destacarlos del texto normal */
 .ejemplo {
   background: rgba(42, 122, 95, 0.1);
   padding: 1rem;
@@ -1784,12 +2169,15 @@ button { font-family: inherit; cursor: pointer; }
 }
 
 /* Accesibilidad info */
+/* La información sobre accesibilidad también va en un grid responsivo 
+   para que se vea bien en cualquier dispositivo */
 .accesibilidad-info {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 2rem;
 }
 
+/* Cada ítem de accesibilidad es una tarjeta que explica alguna característica */
 .accesibilidad-item {
   background: var(--card);
   padding: 2rem;
@@ -1810,12 +2198,14 @@ button { font-family: inherit; cursor: pointer; }
 }
 
 /* Contacto */
+/* La información de contacto también usa un grid para organizar los datos */
 .contacto-info {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 2rem;
 }
 
+/* Cada ítem de contacto muestra un método de contacto diferente */
 .contacto-item {
   background: var(--card);
   padding: 2rem;
@@ -1835,10 +2225,12 @@ button { font-family: inherit; cursor: pointer; }
 }
 
 /* Formulario de contacto */
+/* Agregamos un poco de espacio arriba para separar el formulario del resto del contenido */
 .formulario-contacto {
   margin-top: 1.5rem;
 }
 
+/* Cada campo del formulario tiene su propio grupo con espaciado consistente */
 .formulario-grupo {
   margin-bottom: 1.5rem;
 }
@@ -1850,6 +2242,7 @@ button { font-family: inherit; cursor: pointer; }
   color: var(--text);
 }
 
+/* Los inputs tienen un estilo consistente y cambian de color cuando los enfocas */
 .formulario-grupo input,
 .formulario-grupo select,
 .formulario-grupo textarea {
@@ -1863,6 +2256,7 @@ button { font-family: inherit; cursor: pointer; }
   transition: border-color 0.2s ease;
 }
 
+/* Cuando el usuario hace foco en un campo, el borde se pone verde para que sea claro */
 .formulario-grupo input:focus,
 .formulario-grupo select:focus,
 .formulario-grupo textarea:focus {
@@ -2010,18 +2404,17 @@ button { font-family: inherit; cursor: pointer; }
   }
 }
 
-/* ---------------------------------------------------------
-   FIN DEL ARCHIVO
-   --------------------------------------------------------- */
-/* ...existing code... */
+
 /* =========================================================
    🔑 ESTILOS PARA PÁGINAS DE AUTENTICACIÓN Y PERFIL
    ========================================================= */
 
 /* Contenedor centrado para login y registro */
+/* Este contenedor está diseñado para las páginas de login y registro.
+   Lo centramos en la pantalla y le damos un ancho máximo para que se vea bien en desktop */
 .auth-container {
   max-width: 480px;
-  margin: 4rem auto;
+  margin: 2rem auto;
   padding: 2rem;
   background: var(--card);
   border-radius: var(--radius);
@@ -2033,6 +2426,7 @@ button { font-family: inherit; cursor: pointer; }
   border-color: rgba(255,255,255,0.1);
 }
 
+/* El título de autenticación está centrado y tiene buen tamaño para destacar */
 .auth-titulo {
   text-align: center;
   margin: 0 0 0.5rem 0;
@@ -2040,6 +2434,7 @@ button { font-family: inherit; cursor: pointer; }
   color: var(--text);
 }
 
+/* La descripción es más pequeña y en color suave para no competir con el título */
 .auth-descripcion {
   text-align: center;
   margin-bottom: 2rem;
@@ -2050,12 +2445,14 @@ button { font-family: inherit; cursor: pointer; }
   margin-bottom: 1.5rem;
 }
 
+/* Las etiquetas de los campos son en negrita para que sean fáciles de identificar */
 .auth-form .formulario-grupo label {
   font-weight: 600;
   margin-bottom: 0.5rem;
   display: block;
 }
 
+/* Los inputs de autenticación tienen un borde más grueso para mayor visibilidad */
 .auth-form .formulario-grupo input {
   width: 100%;
   padding: 0.75rem;
@@ -2072,12 +2469,14 @@ button { font-family: inherit; cursor: pointer; }
   color: var(--text);
 }
 
+/* Cuando el usuario hace foco en un campo, el borde se pone verde con una sombra suave */
 .auth-form .formulario-grupo input:focus {
   outline: none;
   border-color: var(--primary);
   box-shadow: 0 0 0 3px rgba(42, 122, 95, 0.1);
 }
 
+/* Los enlaces de ayuda (como "¿Olvidaste tu contraseña?") están centrados debajo del formulario */
 .auth-enlace {
   text-align: center;
   margin-top: 1.5rem;
@@ -2092,6 +2491,7 @@ button { font-family: inherit; cursor: pointer; }
 }
 
 /* Mensajes de error/éxito */
+/* Estos mensajes se muestran cuando algo sale bien o mal durante el proceso de autenticación */
 .auth-error, .auth-success {
   padding: 1rem;
   border-radius: 8px;
@@ -2099,12 +2499,14 @@ button { font-family: inherit; cursor: pointer; }
   font-weight: 500;
 }
 
+/* Los mensajes de error usan tonos rojos para indicar que algo salió mal */
 .auth-error {
   background: rgba(239, 68, 68, 0.1);
   color: #dc2626;
   border: 1px solid #dc2626;
 }
 
+/* Los mensajes de éxito usan tonos verdes para indicar que todo está bien */
 .auth-success {
   background: rgba(34, 197, 94, 0.1);
   color: #16a34a;
@@ -2112,11 +2514,13 @@ button { font-family: inherit; cursor: pointer; }
 }
 
 /* Contenedor de Perfil */
+/* El perfil tiene un ancho máximo más ancho que el login porque tiene más contenido */
 .perfil-container {
   max-width: 800px;
-  margin: 4rem auto;
+  margin: 2rem auto;
 }
 
+/* Cada sección del perfil (información personal, configuración, etc.) está en su propia tarjeta */
 .perfil-seccion {
   margin-bottom: 3rem;
   padding: 2rem;
@@ -2130,6 +2534,7 @@ button { font-family: inherit; cursor: pointer; }
   border-color: rgba(255,255,255,0.1);
 }
 
+/* Los títulos de las secciones tienen un separador debajo para organizar visualmente */
 .perfil-seccion h3 {
   margin: 0 0 1.5rem 0;
   font-size: 1.5rem;
@@ -2141,6 +2546,7 @@ button { font-family: inherit; cursor: pointer; }
   border-bottom-color: rgba(255,255,255,0.1);
 }
 
+/* Los textos de ayuda debajo de los campos son pequeños y discretos */
 .perfil-seccion .formulario-grupo small {
   font-size: 0.85rem;
   color: var(--muted);
@@ -2148,6 +2554,7 @@ button { font-family: inherit; cursor: pointer; }
   display: block;
 }
 
+/* Los campos deshabilitados (como el email que no se puede cambiar) tienen un estilo diferente */
 .perfil-seccion .formulario-grupo input:disabled {
   background: rgba(0,0,0,0.05);
   color: var(--muted);
@@ -2158,9 +2565,6 @@ button { font-family: inherit; cursor: pointer; }
   background: rgba(255,255,255,0.05);
 }
 
-/* ... (después de .auth-enlace) ... */
-
-/* ... (dentro de la sección de autenticación) ... */
 
 .auth-enlace-secundario {
   display: flex; /* <-- NUEVO */
@@ -2188,16 +2592,19 @@ button { font-family: inherit; cursor: pointer; }
 /* ... (después de .auth-enlace-secundario) ... */
 
 /* Contenedor para el input con icono */
+/* Este contenedor permite posicionar un icono dentro del campo de entrada */
 .input-con-icono {
   position: relative;
 }
 
 /* Dejar espacio a la derecha en el input para el icono */
+/* Agregamos padding extra a la derecha para que el icono de mostrar/ocultar contraseña no tape el texto */
 .input-con-icono input {
   padding-right: 3.5rem !important; 
 }
 
 /* Estilo del botón de mostrar/ocultar */
+/* Este botón se coloca dentro del campo de contraseña para que el usuario pueda ver lo que escribe */
 .toggle-password {
   position: absolute;
   right: 0.5rem;
@@ -2215,6 +2622,7 @@ button { font-family: inherit; cursor: pointer; }
   transition: color 0.2s ease, background 0.2s ease;
 }
 
+/* Cuando pasas el mouse sobre el botón, cambia de color para indicar que es clickeable */
 .toggle-password:hover {
   color: var(--text);
   background: rgba(0,0,0,0.05);
@@ -2225,7 +2633,398 @@ button { font-family: inherit; cursor: pointer; }
 }
 
 /* Anulación de foco para que se vea bien */
+/* El foco del botón es visible para usuarios de teclado */
 .toggle-password:focus {
    outline: 2px solid var(--primary);
    outline-offset: 1px;
+}
+
+/* =========================================================
+   💅 ESTILOS ADICIONALES PARA PÁGINA DE PERFIL
+   ========================================================= */
+
+/* Contenedor de los botones de navegación del perfil */
+.perfil-nav-botones {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  border-bottom: 1px solid rgba(0,0,0,0.05);
+  padding-bottom: 2rem;
+}
+
+.perfil-nav-botones .boton {
+  flex: 1; /* Hace que los botones compartan el espacio */
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  justify-content: center; /* Centra el texto del botón */
+}
+
+/* Ocultar secciones de contenido por defecto */
+.perfil-contenido {
+  display: none; /* JS controlará esto */
+}
+
+/* Modo oscuro para la nueva barra de botones */
+:root[data-contraste="alto"] .perfil-nav-botones {
+  border-bottom-color: rgba(255,255,255,0.1);
+}
+
+
+/* =========================================================
+   🔒 ESTILOS PARA BLOQUEO DE LOGIN
+   ========================================================= */
+
+   .auth-lockout {
+    padding: 1rem;
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
+    font-weight: 500;
+    /* Usamos colores de advertencia (amarillo/naranja) para indicar que el usuario está bloqueado temporalmente */
+    background: rgba(251, 191, 36, 0.1); 
+    color: #d97706; 
+    border: 1px solid #d97706;
+    text-align: center;
+  }
+  
+  /* El contador de tiempo tiene un color más oscuro para destacarlo dentro del mensaje */
+  .auth-lockout span {
+    font-weight: 700;
+    color: #b45309; /* Naranja más oscuro para el contador */
+  }
+  
+  /* Modo oscuro para el bloqueo */
+  /* En modo oscuro usamos tonos más claros para que el mensaje siga siendo visible */
+  :root[data-contraste="alto"] .auth-lockout {
+    background: rgba(251, 191, 36, 0.15); 
+    color: #f59e0b; 
+    border: 1px solid #f59e0b;
+  }
+  :root[data-contraste="alto"] .auth-lockout span {
+    color: #fcd34d;
+  }
+
+  /* =========================================================
+   📱 MEJORAS DE RESPONSIVE (Menú Hamburguesa)
+   ========================================================= */
+
+/* Este contenedor interno organiza todos los elementos de la cabecera (logo, menú, botones) */
+.cabecera__contenido {
+  /* Nuevo contenedor interno para alinear items */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  max-width: 1400px; /* Ajusta esto a tu max-width global si es necesario */
+  margin: 0 auto;
+  padding: 0.75rem 1rem;
+  gap: var(--gap);
+}
+
+/* Este contenedor agrupa el menú y los botones que se ocultarán en móviles */
+.menu-colapsable {
+  /* Contenedor para todo lo que se ocultará */
+  display: flex;
+  align-items: center;
+  gap: var(--gap);
+}
+
+/* El botón hamburguesa solo aparece en móviles, en desktop está oculto */
+.menu-toggle {
+  /* Estilo del botón hamburguesa */
+  display: none; /* Oculto en desktop */
+  background: none;
+  border: none;
+  padding: 0.5rem;
+  border-radius: 8px;
+  cursor: pointer;
+  color: var(--text);
+  z-index: 51; /* Asegurar que esté sobre otros elementos */
+}
+
+/* Cuando pasas el mouse sobre el botón hamburguesa, tiene un fondo sutil */
+.menu-toggle:hover {
+  background: rgba(0,0,0,0.05);
+}
+
+:root[data-contraste="alto"] .menu-toggle {
+  color: var(--text);
+}
+:root[data-contraste="alto"] .menu-toggle:hover {
+  background: rgba(255,255,255,0.1);
+}
+
+/* Usamos 980px como breakpoint, 
+  basado en tus media queries existentes 
+   A partir de este tamaño, el menú se convierte en hamburguesa
+*/
+@media (max-width: 980px) {
+
+  .cabecera__contenido {
+    /* Permitir que el logo y el botón se alineen */
+    flex-wrap: nowrap; 
+  }
+
+  /* Ahora sí mostramos el botón hamburguesa porque estamos en móvil */
+  .menu-toggle {
+    display: flex; /* Mostrar el botón hamburguesa */
+  }
+
+  /* El menú se oculta por defecto y solo se muestra cuando se hace clic en el botón */
+  .menu-colapsable {
+    /* Ocultar el menú por defecto */
+    display: none; 
+
+    /* Estilo del menú desplegado cuando está abierto */
+    position: absolute;
+    top: 100%; /* Justo debajo de la cabecera */
+    left: 0;
+    right: 0;
+    flex-direction: column;
+    align-items: stretch; /* Ocupar todo el ancho */
+    width: 100%;
+    margin-top: 0;
+    padding: 1rem;
+    background: var(--card);
+    border-radius: 0 0 var(--radius) var(--radius);
+    box-shadow: var(--shadow-md);
+    border: 1px solid rgba(0,0,0,0.05);
+    border-top: none; /* La cabecera ya tiene borde */
+  }
+
+  /* Cuando JavaScript añade la clase 'is-open', el menú se muestra */
+  .menu-colapsable.is-open {
+    display: flex; 
+  }
+
+  .menu-horizontal {
+    justify-content: flex-start;
+    width: 100%;
+  }
+
+  .menu__lista--horizontal {
+    flex-direction: column;
+    align-items: stretch; /* Items al 100% */
+    gap: 0.5rem;
+    width: 100%;
+  }
+
+  .menu__item {
+    padding: 0.75rem 1rem;
+  }
+  .menu__item:hover {
+    transform: none; /* Quitar efecto hover de desktop */
+  }
+
+  .cabecera__der {
+    flex-direction: column;
+    align-items: stretch; /* Botones al 100% */
+    width: 100%;
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(0,0,0,0.05);
+  }
+  
+  .cabecera__der .boton,
+  .cabecera__der a.boton {
+    width: 100%;
+    text-align: center;
+    justify-content: center;
+  }
+  
+  :root[data-contraste="alto"] .menu-colapsable {
+    background: var(--card);
+    border-color: rgba(255,255,255,0.1);
+  }
+  :root[data-contraste="alto"] .cabecera__der {
+     border-top-color: rgba(255,255,255,0.1);
+  }
+}
+
+/* =========================================================
+   ♿ ESTILOS PARA BOTÓN FLOTANTE DE ACCESIBILIDAD
+   ========================================================= */
+
+.boton-flotante {
+  /* Posición fija en la esquina inferior derecha */
+  position: fixed;
+  bottom: 2rem; /* Distancia desde la parte inferior */
+  right: 2rem; /* Distancia desde la derecha */
+  z-index: 900; /* Asegura que esté sobre otros elementos, como el footer */
+  
+  /* Estilo visual heredado del análisis anterior */
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: var(--primary);
+  color: white;
+  border: 3px solid var(--card);
+  box-shadow: var(--shadow-md);
+  
+  /* Centrado de icono */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+  /* Animación */
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+}
+
+.boton-flotante:hover {
+  transform: scale(1.05);
+  box-shadow: 0 10px 30px rgba(42, 122, 95, 0.3);
+  background: var(--accent);
+}
+
+.boton-flotante svg {
+  width: 28px;
+  height: 28px;
+}
+
+/* Modo oscuro para el botón flotante */
+:root[data-contraste="alto"] .boton-flotante {
+  background: var(--primary);
+  border-color: var(--card);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+}
+
+@media (max-width: 768px) {
+  .boton-flotante {
+    bottom: 1rem;
+    right: 1rem;
+    width: 48px;
+    height: 48px;
+  }
+}
+
+/* ---------------------------------------------------------
+   👨‍💼 ESTILOS PARA ADMINISTRACIÓN DE RUTAS
+   --------------------------------------------------------- */
+.rutas-seccion--admin {
+  background-color: var(--card);
+  padding: 2rem 0;
+  margin-top: 2rem;
+  border-top: 2px solid var(--primary);
+}
+
+.admin-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.admin-lista {
+  max-height: 600px;
+  overflow-y: auto;
+  padding-right: 1rem;
+}
+
+.admin-lista::-webkit-scrollbar {
+  width: 8px;
+}
+
+.admin-lista::-webkit-scrollbar-track {
+  background: var(--bg);
+  border-radius: 4px;
+}
+
+.admin-lista::-webkit-scrollbar-thumb {
+  background: var(--muted);
+  border-radius: 4px;
+}
+
+.admin-lista::-webkit-scrollbar-thumb:hover {
+  background: var(--primary);
+}
+
+.tarjeta-ruta--admin {
+  margin-bottom: 1rem;
+  padding: 1rem;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: var(--radius);
+  background-color: var(--card);
+  transition: all 0.2s ease;
+}
+
+.tarjeta-ruta--admin:hover {
+  box-shadow: var(--shadow-sm);
+  border-color: var(--primary);
+}
+
+.admin-formulario {
+  background-color: var(--card);
+  padding: 1.5rem;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+}
+
+.admin-formulario h3 {
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+  color: var(--primary);
+}
+
+.formulario-dos-columnas {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.formulario-acciones {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+@media (max-width: 968px) {
+  .admin-layout {
+    grid-template-columns: 1fr;
+  }
+  
+  .admin-lista {
+    max-height: 400px;
+  }
+  
+  .formulario-dos-columnas {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ---------------------------------------------------------
+   🎨 MODAL DE GESTIÓN DE RUTAS
+   --------------------------------------------------------- */
+.modal__contenido--gestion {
+  max-width: 1200px;
+  width: 95%;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.modal__contenido--gestion .admin-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  padding: 1rem 0;
+}
+
+.modal__contenido--gestion .admin-lista {
+  max-height: 70vh;
+  overflow-y: auto;
+  padding-right: 0.5rem;
+}
+
+.modal__contenido--gestion .admin-formulario {
+  background-color: transparent;
+  padding: 0;
+  box-shadow: none;
+}
+
+@media (max-width: 968px) {
+  .modal__contenido--gestion .admin-layout {
+    grid-template-columns: 1fr;
+  }
+  
+  .modal__contenido--gestion .admin-lista {
+    max-height: 50vh;
+  }
 }

@@ -5,13 +5,30 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Rutas — Rutas Eco-Comunitarias</title>
   <link rel="stylesheet" href="/src/styles.css">
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
   
-  <!-- Script anti-flash: aplica tema inmediatamente -->
+  <!-- Script anti-flash: aplica tema y accesibilidad inmediatamente -->
   <script>
     (function() {
+      // Aplicar contraste alto
       const contrasteGuardado = localStorage.getItem('contrasteAlto');
       if (contrasteGuardado === 'true') {
         document.documentElement.setAttribute('data-contraste', 'alto');
+      }
+      
+      // Aplicar tamaño de texto guardado
+      const tamañoTexto = localStorage.getItem('tamañoTexto');
+      if (tamañoTexto) {
+        document.documentElement.style.fontSize = tamañoTexto + '%';
+      }
+      
+      // Aplicar otras configuraciones de accesibilidad
+      if (localStorage.getItem('alertasActivas') === 'true') {
+        document.documentElement.setAttribute('data-alertas', 'activas');
+      }
+      if (localStorage.getItem('lecturaVoz') === 'true') {
+        document.documentElement.setAttribute('data-lectura-voz', 'activa');
       }
     })();
   </script>
@@ -19,25 +36,56 @@
 
 <body>
   <header class="cabecera">
-    <div class="cabecera__izq">
-      <img src="/src/logo-placeholder.svg" alt="Logo Plataforma" class="logo">
-      <h1 class="nombre-sistema">Rutas Eco-Comunitarias</h1>
-    </div>
+    <div class="cabecera__contenido">
+  
+      <div class="cabecera__izq">
+        <img src="/src/logo-placeholder.svg" alt="Logo Plataforma" class="logo">
+        <h1 class="nombre-sistema">Rutas Eco-Comunitarias</h1>
+      </div>
+  
+      <div class="menu-colapsable" id="menu-colapsable">
+        <nav class="menu-horizontal" aria-label="Menú principal">
+          <ul id="menuItems" class="menu__lista--horizontal">
+            
+            <li><a href="/index.html" class="menu__item">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+              <span data-i18n="nav.inicio">Inicio</span>
+            </a></li>
+            
+            <li><a href="/pages/rutas.html" class="menu__item">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+              <span data-i18n="nav.rutas">Rutas</span>
+            </a></li>
+            
+            <li><a href="/pages/novedades.html" class="menu__item">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+              <span data-i18n="nav.novedades">Novedades</span>
+            </a></li>
+            
+            <li><a href="/pages/ayuda.html" class="menu__item">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+              <span data-i18n="nav.ayuda">Ayuda</span>
+            </a></li>
 
-    <nav class="menu-horizontal" aria-label="Menú principal">
-      <ul id="menuItems" class="menu__lista--horizontal">
-        <li><a href="/index.html" class="menu__item" data-i18n="nav.inicio">Inicio</a></li>
-        <li><a href="/pages/rutas.html" class="menu__item activo" data-i18n="nav.rutas">Rutas</a></li>
-        <li><a href="/pages/novedades.html" class="menu__item" data-i18n="nav.novedades">Novedades</a></li>
-        <li><a href="/pages/ayuda.html" class="menu__item" data-i18n="nav.ayuda">Ayuda</a></li>
-        <li><a href="#" class="menu__item" id="abrir-accesibilidad" data-i18n="nav.accesibilidad">Accesibilidad</a></li>
-      </ul>
-    </nav>
-
-    <div class="cabecera__der">
-      <button class="boton" id="boton-idioma">🌐 ES</button>
-      <a href="/pages/login.html" class="boton" data-i18n="btn.iniciar-sesion">Iniciar Sesion</a>
-      <button id="boton-accesibilidad" class="boton" data-i18n="btn.modo-oscuro">Modo oscuro</button>
+          </ul>
+        </nav>
+  
+        <div class="cabecera__der">
+          <button class="boton" id="boton-idioma">🌐 ES</button>
+          <a href="/pages/registro.html" class="boton">Registrarse</a>
+          <a href="/pages/login.html" class="boton" data-i18n="btn.iniciar-sesion">Iniciar Sesion</a>
+          <button id="boton-accesibilidad" class="boton" data-i18n="btn.modo-oscuro">Modo oscuro</button>
+        </div>
+      </div>
+      
+      <button class="menu-toggle" id="menuToggle" aria-label="Abrir menú" aria-expanded="false">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="3" y1="12" x2="21" y2="12"></line>
+          <line x1="3" y1="6" x2="21" y2="6"></line>
+          <line x1="3" y1="18" x2="21" y2="18"></line>
+        </svg>
+      </button>
+  
     </div>
   </header>
 
@@ -140,9 +188,19 @@
     <section class="rutas-seccion" aria-label="Lista de rutas">
       <div class="container">
         <div class="rutas-header">
-    <h2 data-i18n="rutas.disponibles">Rutas disponibles</h2>
-          <div class="rutas-contador">
-            <span id="contador-rutas" data-i18n="rutas.contador">0 rutas encontradas</span>
+          <h2 data-i18n="rutas.disponibles">Rutas disponibles</h2>
+          <div style="display: flex; align-items: center; gap: 1rem;">
+            <div class="rutas-contador">
+              <span id="contador-rutas" data-i18n="rutas.contador">0 rutas encontradas</span>
+            </div>
+            <!-- Botón de gestión para administradores (se mostrará dinámicamente) -->
+            <button class="boton secundario" id="btn-gestionar-rutas" style="display: none; align-items: center; gap: 0.5rem;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 20h9"></path>
+                <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+              </svg>
+              <span id="btn-gestionar-texto">Gestionar Rutas</span>
+            </button>
           </div>
         </div>
 
@@ -154,46 +212,293 @@
         </div>
       </div>
     </section>
+
   </main>
 
-  <footer class="pie">
-    <small>© <span id="ano"></span> <span data-i18n="footer.derechos">Rutas Eco-Comunitarias</span></small>
-  </footer>
-    <!-- Modal de Accesibilidad -->
-    <div id="modal-accesibilidad" class="modal" role="dialog" aria-labelledby="modal-accesibilidad-titulo" aria-hidden="true">
-      <div class="modal__overlay"></div>
-      <div class="modal__contenido modal__contenido--accesibilidad">
-        <div class="modal__header">
-          <h3 id="modal-accesibilidad-titulo" class="modal__titulo" data-i18n="accesibilidad.titulo">Configuración de Accesibilidad</h3>
-          <button class="modal__cerrar" id="modal-accesibilidad-cerrar" aria-label="Cerrar modal" data-i18n="btn.cerrar">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <line x1="18" y1="6" x2="6" y2="18"/>
-              <line x1="6" y1="6" x2="18" y2="18"/>
-            </svg>
-          </button>
+  <footer class="pie-profesional">
+    <div class="pie-contenido">
+      
+      <div class="pie-columna pie-columna--brand">
+        <img src="/src/logo-placeholder.svg" alt="Logo Plataforma" class="logo">
+        <h3 class="nombre-sistema">Rutas Eco-Comunitarias</h3>
+        <p>Conectando la naturaleza con la comunidad de forma sostenible.</p>
+      </div>
+      
+      <div class="pie-columna">
+        <h4>Navegación</h4>
+        <ul>
+          <li><a href="/index.html" class="pie-link" data-i18n="nav.inicio">Inicio</a></li>
+          <li><a href="/pages/rutas.html" class="pie-link" data-i18n="nav.rutas">Rutas</a></li>
+          <li><a href="/pages/novedades.html" class="pie-link" data-i18n="nav.novedades">Novedades</a></li>
+        </ul>
+      </div>
+      
+      <div class="pie-columna">
+        <h4>Soporte</h4>
+        <ul>
+          <li><a href="/pages/ayuda.html" class="pie-link" id="link-soporte" data-i18n="footer.soporte">Ayuda / Contacto</a></li>
+          <li><a href="/pages/terminos.html" class="pie-link" target="_blank" rel="noopener noreferrer">Términos y Privacidad</a></li>
+          <li><a href="/pages/ayuda.html#tab-accesibilidad" class="pie-link">Accesibilidad</a></li>
+        </ul>
+      </div>
+      
+      <div class="pie-columna">
+        <h4>Síguenos</h4>
+        <div class="pie-sociales">
+          <a href="#" class="pie-social-link" aria-label="Facebook">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>
+          </a>
+          <a href="#" class="pie-social-link" aria-label="Instagram">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.07 1.646.07 4.85s-.012 3.584-.07 4.85c-.148 3.227-1.664 4.771-4.919 4.919-1.266.058-1.646.07-4.85.07s-3.584-.012-4.85-.07c-3.252-.148-4.771-1.691-4.919-4.919-.058-1.265-.07-1.646-.07-4.85s.012-3.584.07-4.85c.148-3.227 1.664 4.771 4.919-4.919C8.416 2.175 8.796 2.163 12 2.163zm0 1.62c-3.14 0-3.486.01-4.708.066-2.678.122-3.83 1.274-3.952 3.952C3.27 8.92 3.26 9.266 3.26 12s.01 3.08.066 4.708c.122 2.678 1.274 3.83 3.952 3.952C8.51 20.73 8.86 20.74 12 20.74s3.08-.01 4.708-.066c2.678-.122 3.83-1.274 3.952-3.952C20.73 15.08 20.74 14.734 20.74 12s-.01-3.08-.066-4.708c-.122-2.678-1.274-3.83-3.952-3.952C15.09 3.27 14.74 3.26 12 3.26zm0 2.92c-2.92 0-5.28 2.36-5.28 5.28s2.36 5.28 5.28 5.28 5.28-2.36 5.28-5.28-2.36-5.28-5.28-5.28zm0 8.52c-1.8 0-3.24-1.44-3.24-3.24s1.44-3.24 3.24-3.24 3.24 1.44 3.24 3.24-1.44 3.24-3.24 3.24zM16.965 6.57c-.7 0-1.275.575-1.275 1.275s.575 1.275 1.275 1.275 1.275-.575 1.275-1.275-.575-1.275-1.275-1.275z"></path></svg>
+          </a>
         </div>
-        
-        <div class="modal__body">
-          <div class="accesibilidad-opciones">
-            <div class="accesibilidad-opcion">
-              <h4 data-i18n="accesibilidad.modo-oscuro">🌙 Modo Oscuro</h4>
-              <p data-i18n="accesibilidad.modo-oscuro.desc">Reduce la fatiga visual en ambientes con poca luz</p>
-              <button class="boton" id="toggle-modo-oscuro" data-i18n="accesibilidad.modo-oscuro">Activar Modo Oscuro</button>
+      </div>
+    </div>
+    
+    <div class="pie-bottom-bar">
+      <small>© <span id="ano"></span> <span data-i18n="footer.derechos">Rutas Eco-Comunitarias</span>. Todos los derechos reservados.</small>
+    </div>
+  </footer>
+
+  <!-- MODAL DE GESTIÓN DE RUTAS (SOLO ADMINISTRADORES) -->
+  <div id="modal-gestion-rutas" class="modal" role="dialog" aria-labelledby="modal-gestion-rutas-titulo" aria-hidden="true">
+    <div class="modal__overlay"></div>
+    <div class="modal__contenido modal__contenido--gestion" style="max-width: 1200px; max-height: 90vh; overflow-y: auto;">
+      <div class="modal__header">
+        <h3 id="modal-gestion-rutas-titulo" class="modal__titulo">Gestión de Rutas</h3>
+        <button class="modal__cerrar" id="modal-gestion-rutas-cerrar" aria-label="Cerrar modal">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"/>
+            <line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+        </button>
+      </div>
+      
+      <div class="modal__body">
+        <div class="admin-layout" style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+          <div class="admin-lista" id="admin-rutas-lista" style="max-height: 70vh; overflow-y: auto;">
+            <!-- Lista de rutas para editar/eliminar -->
+            <p>Cargando rutas...</p>
+          </div>
+
+          <div class="admin-formulario">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+              <h3 id="admin-form-titulo" style="margin: 0;">Crear Nueva Ruta</h3>
+              <button class="boton primario" id="admin-nueva-ruta" style="display: inline-flex; align-items: center; gap: 0.5rem;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <line x1="12" y1="5" x2="12" y2="19"></line>
+                  <line x1="5" y1="12" x2="19" y2="12"></line>
+                </svg>
+                Nueva Ruta
+              </button>
             </div>
-  
-            <div class="accesibilidad-opcion">
-              <h4 data-i18n="accesibilidad.texto-ampliado">🔍 Texto Ampliado</h4>
-              <p data-i18n="accesibilidad.texto-ampliado.desc">Amplía el tamaño del texto para mejor legibilidad</p>
-              <div class="control-texto">
-                <button class="boton" id="reducir-texto">A-</button>
-                <span id="tamaño-texto">100%</span>
-                <button class="boton" id="aumentar-texto">A+</button>
+            
+            <form id="admin-ruta-form" class="auth-form">
+              <input type="hidden" id="admin-ruta-id">
+
+              <div class="formulario-grupo">
+                <label for="admin-nombre">Nombre de la ruta *</label>
+                <input type="text" id="admin-nombre" required>
               </div>
-            </div>
+
+              <div class="formulario-grupo">
+                <label for="admin-descripcion">Descripción *</label>
+                <textarea id="admin-descripcion" rows="3" required></textarea>
+              </div>
+
+              <div class="formulario-grupo">
+                <label for="admin-imagen-file">Imagen de la ruta</label>
+                <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                  <input type="file" id="admin-imagen-file" accept="image/jpeg,image/jpg,image/png,image/webp" style="display: none;">
+                  <button type="button" class="boton secundario" id="admin-btn-subir-imagen" style="width: fit-content;">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                      <polyline points="17 8 12 3 7 8"></polyline>
+                      <line x1="12" y1="3" x2="12" y2="15"></line>
+                    </svg>
+                    Subir Imagen
+                  </button>
+                  <div id="admin-imagen-preview" style="display: none; margin-top: 0.5rem;">
+                    <img id="admin-imagen-preview-img" src="" alt="Vista previa" style="max-width: 200px; max-height: 150px; border-radius: 8px; border: 1px solid #ddd;">
+                    <button type="button" class="boton secundario" id="admin-btn-eliminar-imagen" style="margin-top: 0.5rem; background-color: #dc3545; color: white;">Eliminar</button>
+                  </div>
+                  <small style="color: var(--muted);">Formatos permitidos: JPG, PNG, WEBP (máx. 5MB)</small>
+                </div>
+                <input type="hidden" id="admin-imagen-url">
+              </div>
+
+              <div class="formulario-grupo">
+                <label for="admin-imagen">O usar URL de imagen (opcional)</label>
+                <input type="url" id="admin-imagen" placeholder="https://...">
+              </div>
+
+              <div class="formulario-grupo">
+                <label for="admin-dificultad">Dificultad *</label>
+                <select id="admin-dificultad" required>
+                  <option value="">Seleccionar...</option>
+                  <option value="facil">Fácil</option>
+                  <option value="media">Media</option>
+                  <option value="dificil">Difícil</option>
+                </select>
+              </div>
+
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                <div class="formulario-grupo">
+                  <label for="admin-duracion">Duración (horas) *</label>
+                  <input type="number" id="admin-duracion" step="0.5" min="0.5" required>
+                </div>
+                <div class="formulario-grupo">
+                  <label for="admin-distancia">Distancia (km) *</label>
+                  <input type="number" id="admin-distancia" step="0.1" min="0.1" required>
+                </div>
+              </div>
+
+              <div class="formulario-grupo">
+                <label for="admin-ubicacion">Ubicación *</label>
+                <input type="text" id="admin-ubicacion" required>
+              </div>
+
+              <div class="formulario-grupo">
+                <label>Mapa - Marcar inicio y fin de la ruta</label>
+                <div id="admin-mapa-ruta" style="height: 400px; border-radius: 8px; border: 1px solid #ddd; margin-top: 0.5rem;"></div>
+                <div style="display: flex; gap: 1rem; margin-top: 0.5rem; font-size: 0.9rem;">
+                  <div style="display: flex; align-items: center; gap: 0.5rem;">
+                    <span style="display: inline-block; width: 20px; height: 20px; background-color: #28a745; border-radius: 50%; border: 2px solid white; box-shadow: 0 0 0 2px #28a745;"></span>
+                    <span>Inicio</span>
+                  </div>
+                  <div style="display: flex; align-items: center; gap: 0.5rem;">
+                    <span style="display: inline-block; width: 20px; height: 20px; background-color: #dc3545; border-radius: 50%; border: 2px solid white; box-shadow: 0 0 0 2px #dc3545;"></span>
+                    <span>Fin</span>
+                  </div>
+                </div>
+                <small style="color: var(--muted);">Haz clic en el mapa para marcar el punto de inicio (verde) y luego el punto de fin (rojo)</small>
+                <!-- Campos ocultos para coordenadas -->
+                <input type="hidden" id="admin-latitud-inicio">
+                <input type="hidden" id="admin-longitud-inicio">
+                <input type="hidden" id="admin-latitud-fin">
+                <input type="hidden" id="admin-longitud-fin">
+              </div>
+
+              <div class="formulario-grupo">
+                <label for="admin-tipo">Tipo de ruta *</label>
+                <select id="admin-tipo" required>
+                  <option value="">Seleccionar...</option>
+                  <option value="senderismo">Senderismo</option>
+                  <option value="ciclismo">Ciclismo</option>
+                  <option value="observacion">Observación</option>
+                  <option value="fotografia">Fotografía</option>
+                </select>
+              </div>
+
+              <div class="formulario-grupo">
+                <label for="admin-puntuacion">Puntuación inicial (0-5)</label>
+                <input type="number" id="admin-puntuacion" step="0.1" min="0" max="5" value="0">
+              </div>
+
+              <div class="formulario-grupo">
+                <label for="admin-plan">Plan de la ruta *</label>
+                <select id="admin-plan" required>
+                  <option value="basico">Básico (visible para todos)</option>
+                  <option value="pro">Pro (solo usuarios con plan Pro)</option>
+                </select>
+                <small style="color: var(--muted);">Las rutas Pro solo son visibles para usuarios con plan Pro.</small>
+              </div>
+
+              <div style="display: flex; gap: 1rem; margin-top: 1rem;">
+                <button type="submit" class="boton primario" id="admin-guardar-btn">Guardar Ruta</button>
+                <button type="button" class="boton secundario" id="admin-cancelar-edicion" style="display:none;">Cancelar Edición</button>
+              </div>
+
+              <div id="admin-rutas-mensaje" class="auth-error" style="display:none; margin-top: 1rem;"></div>
+            </form>
           </div>
         </div>
       </div>
     </div>
+  </div>
+
+  <!-- Modal de Accesibilidad -->
+  <div id="modal-accesibilidad" class="modal" role="dialog" aria-labelledby="modal-accesibilidad-titulo" aria-hidden="true">
+  <div class="modal__overlay"></div>
+  <div class="modal__contenido modal__contenido--accesibilidad">
+    <div class="modal__header">
+      <h3 id="modal-accesibilidad-titulo" class="modal__titulo" data-i18n="accesibilidad.titulo">Configuración de Accesibilidad</h3>
+      <button class="modal__cerrar" id="modal-accesibilidad-cerrar" aria-label="Cerrar modal" data-i18n="btn.cerrar">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="18" y1="6" x2="6" y2="18"/>
+          <line x1="6" y1="6" x2="18" y2="18"/>
+        </svg>
+      </button>
+    </div>
+    
+    <div class="modal__body">
+      <div class="accesibilidad-opciones">
+
+        <div class="accesibilidad-opcion">
+          <h4 data-i18n="accesibilidad.alto-contraste">⚡ Alto Contraste</h4>
+          <p data-i18n="accesibilidad.alto-contraste.desc">Mejora la visibilidad con colores de alto contraste</p>
+          <button class="boton" id="toggle-alto-contraste" data-i18n="accesibilidad.alto-contraste">Activar Alto Contraste</button>
+        </div>
+
+        <div class="accesibilidad-opcion">
+          <h4>⌨️ Atajos de Teclado</h4>
+          <p>Navega rápidamente usando combinaciones de teclas. Presiona <kbd>Alt</kbd> + la tecla indicada:</p>
+          <div class="atajos-lista" style="margin-top: 1rem; display: grid; gap: 0.5rem; font-size: 0.9rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.5rem; background: var(--bg); border-radius: 4px;">
+              <span><kbd style="padding: 0.25rem 0.5rem; background: var(--card); border: 1px solid var(--muted); border-radius: 4px; font-family: monospace;">Alt</kbd> + <kbd style="padding: 0.25rem 0.5rem; background: var(--card); border: 1px solid var(--muted); border-radius: 4px; font-family: monospace;">1</kbd></span>
+              <span>Ir a Inicio</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.5rem; background: var(--bg); border-radius: 4px;">
+              <span><kbd style="padding: 0.25rem 0.5rem; background: var(--card); border: 1px solid var(--muted); border-radius: 4px; font-family: monospace;">Alt</kbd> + <kbd style="padding: 0.25rem 0.5rem; background: var(--card); border: 1px solid var(--muted); border-radius: 4px; font-family: monospace;">2</kbd></span>
+              <span>Ir a Rutas</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.5rem; background: var(--bg); border-radius: 4px;">
+              <span><kbd style="padding: 0.25rem 0.5rem; background: var(--card); border: 1px solid var(--muted); border-radius: 4px; font-family: monospace;">Alt</kbd> + <kbd style="padding: 0.25rem 0.5rem; background: var(--card); border: 1px solid var(--muted); border-radius: 4px; font-family: monospace;">3</kbd></span>
+              <span>Ir a Novedades</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.5rem; background: var(--bg); border-radius: 4px;">
+              <span><kbd style="padding: 0.25rem 0.5rem; background: var(--card); border: 1px solid var(--muted); border-radius: 4px; font-family: monospace;">Alt</kbd> + <kbd style="padding: 0.25rem 0.5rem; background: var(--card); border: 1px solid var(--muted); border-radius: 4px; font-family: monospace;">4</kbd></span>
+              <span>Ir a Ayuda</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.5rem; background: var(--bg); border-radius: 4px;">
+              <span><kbd style="padding: 0.25rem 0.5rem; background: var(--card); border: 1px solid var(--muted); border-radius: 4px; font-family: monospace;">Alt</kbd> + <kbd style="padding: 0.25rem 0.5rem; background: var(--card); border: 1px solid var(--muted); border-radius: 4px; font-family: monospace;">P</kbd></span>
+              <span>Ir a Perfil</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.5rem; background: var(--bg); border-radius: 4px;">
+              <span><kbd style="padding: 0.25rem 0.5rem; background: var(--card); border: 1px solid var(--muted); border-radius: 4px; font-family: monospace;">Alt</kbd> + <kbd style="padding: 0.25rem 0.5rem; background: var(--card); border: 1px solid var(--muted); border-radius: 4px; font-family: monospace;">L</kbd></span>
+              <span>Ir a Iniciar Sesión</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.5rem; background: var(--bg); border-radius: 4px;">
+              <span><kbd style="padding: 0.25rem 0.5rem; background: var(--card); border: 1px solid var(--muted); border-radius: 4px; font-family: monospace;">Alt</kbd> + <kbd style="padding: 0.25rem 0.5rem; background: var(--card); border: 1px solid var(--muted); border-radius: 4px; font-family: monospace;">G</kbd></span>
+              <span>Buscar Rutas</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.5rem; background: var(--bg); border-radius: 4px;">
+              <span><kbd style="padding: 0.25rem 0.5rem; background: var(--card); border: 1px solid var(--muted); border-radius: 4px; font-family: monospace;">Alt</kbd> + <kbd style="padding: 0.25rem 0.5rem; background: var(--card); border: 1px solid var(--muted); border-radius: 4px; font-family: monospace;">A</kbd></span>
+              <span>Abrir Accesibilidad</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="accesibilidad-opcion">
+          <h4 data-i18n="accesibilidad.lectura-voz">🔊 Lectura por Voz</h4>
+          <p data-i18n="accesibilidad.lectura-voz.desc">Optimizado para lectores de pantalla</p>
+          <button class="boton" id="toggle-lectura-voz" data-i18n="accesibilidad.lectura-voz">Activar Lectura por Voz</button>
+        </div>
+        
+        <div class="accesibilidad-opcion">
+          <h4 data-i18n="accesibilidad.texto-ampliado">🔍 Texto Ampliado</h4>
+          <p data-i18n="accesibilidad.texto-ampliado.desc">Amplía el tamaño del texto para mejor legibilidad</p>
+          <div class="control-texto">
+            <button class="boton" id="reducir-texto">A-</button>
+            <span id="tamaño-texto">100%</span>
+            <button class="boton" id="aumentar-texto">A+</button>
+          </div>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+</div>
 
   <!-- MODAL DE VISTA PREVIA -->
   <div id="modal-ruta" class="modal" role="dialog" aria-labelledby="modal-titulo" aria-hidden="true">
@@ -297,21 +602,35 @@
     </div>
   </div>
 
+  <!-- Leaflet JS -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
   <script type="module">
-    import { inicializarTema, actualizarAnio, inicializarMenu } from "/src/scripts/comunes.ts";
+    import { inicializarTema, actualizarAnio, inicializarMenu, inicializarSesionUI, inicializarAtajosTeclado } from "/src/scripts/comunes.ts";
     import { inicializarIdiomas, inicializarAccesibilidad, traducirTextoDinamico } from "/src/scripts/idiomas.js";
-    import { 
+      import { 
       obtenerRutasFiltradas, 
       obtenerRutaCompleta, 
       obtenerSugerencias,
       convertirRutaFormato,
-      manejarErrorSupabase 
+      manejarErrorSupabase,
+      guardarRutaFavorita,
+      obtenerTodasLasRutas,
+      crearRuta,
+      actualizarRuta,
+      eliminarRuta,
+      esAdministrador,
+      subirImagenRuta,
+      obtenerPlanUsuario
     } from "/src/services/supabase.js";
 
     // Estado global de la aplicación
     let rutasFiltradas = [];
     let todasLasRutas = [];
     let cargando = false;
+    let rutaSeleccionadaId = null;
+    let esAdmin = false;
+    let planUsuario = 'basico'; // Plan del usuario actual
 
     document.addEventListener("DOMContentLoaded", () => {
       inicializarTema();
@@ -319,10 +638,13 @@
       inicializarMenu();
       inicializarIdiomas();
       inicializarAccesibilidad();
+      inicializarSesionUI();
+      inicializarAtajosTeclado();
       
       inicializarRutas();
       inicializarFiltros();
       inicializarModal();
+      inicializarAdminRutas();
     });
 
     /**
@@ -339,8 +661,11 @@
       mostrarEstadoCarga();
 
       try {
-        // Obtener rutas desde Supabase
-        const { data: rutasDB, error } = await obtenerRutasFiltradas();
+        // Obtener plan del usuario
+        planUsuario = await obtenerPlanUsuario();
+        
+        // Obtener TODAS las rutas (incluidas las Pro) para mostrar el candado
+        const { data: todasLasRutasDB, error } = await obtenerTodasLasRutas();
         
         if (error) {
           console.error('Error al cargar rutas:', error);
@@ -348,9 +673,14 @@
           return;
         }
 
+        // Filtrar por plan: usuarios básicos solo ven rutas básicas en el conteo normal
+        const rutasFiltradasPorPlan = planUsuario === 'pro' 
+          ? todasLasRutasDB 
+          : todasLasRutasDB.filter(r => r.plan === 'basico' || r.plan === null || !r.plan);
+
         // Convertir datos al formato del frontend
-        todasLasRutas = rutasDB.map(convertirRutaFormato);
-        rutasFiltradas = [...todasLasRutas];
+        todasLasRutas = todasLasRutasDB.map(convertirRutaFormato);
+        rutasFiltradas = rutasFiltradasPorPlan.map(convertirRutaFormato);
 
         // Renderizar rutas y actualizar contador
         renderizarRutas();
@@ -422,13 +752,36 @@
         return;
       }
 
-      lista.innerHTML = rutasFiltradas.map(ruta => `
-        <div class="tarjeta-ruta" data-ruta-id="${ruta.id}">
+      // Verificar si hay rutas Pro que no están en el filtro pero deben mostrarse con candado
+      const rutasPro = todasLasRutas.filter(r => r.plan === 'pro' && planUsuario === 'basico');
+      const todasLasRutasParaMostrar = [...rutasFiltradas, ...rutasPro];
+
+      lista.innerHTML = todasLasRutasParaMostrar.map(ruta => {
+        const esRutaPro = ruta.plan === 'pro';
+        const usuarioTienePro = planUsuario === 'pro';
+        const mostrarCandado = esRutaPro && !usuarioTienePro;
+        
+        return `
+        <div class="tarjeta-ruta ${mostrarCandado ? 'tarjeta-ruta--bloqueada' : ''}" data-ruta-id="${ruta.id}" data-ruta-plan="${ruta.plan || 'basico'}">
+          ${mostrarCandado ? `
+          <div class="ruta-bloqueada-overlay">
+            <div class="ruta-bloqueada-contenido">
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-bottom: 1rem;">
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+              </svg>
+              <h4>Esta ruta pertenece al Plan Pro</h4>
+              <p>Actualiza tu plan para acceder a esta ruta exclusiva</p>
+              <a href="/pages/perfil.html" class="boton primario">Actualizar a Plan Pro</a>
+            </div>
+          </div>
+          ` : ''}
           <div class="tarjeta-ruta__imagen">
-            <img src="${ruta.imagen}" alt="${ruta.nombre}" loading="lazy">
+            <img src="${ruta.imagen}" alt="${ruta.nombre}" loading="lazy" style="${mostrarCandado ? 'opacity: 0.5; filter: grayscale(50%);' : ''}">
             <div class="tarjeta-ruta__badges">
               <span class="badge badge--${ruta.dificultad}">${getDificultadTexto(ruta.dificultad)}</span>
               <span class="badge badge--duracion">${ruta.duracion}</span>
+              ${esRutaPro ? '<span class="badge badge--pro">PRO</span>' : ''}
             </div>
           </div>
           <div class="tarjeta-ruta__contenido">
@@ -455,6 +808,7 @@
                 <span>${ruta.puntuacion}/5</span>
               </div>
             </div>
+            ${!mostrarCandado ? `
             <div class="tarjeta-ruta__acciones">
               <button class="boton secundario boton--vista-previa" data-ruta-id="${ruta.id}">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -470,21 +824,43 @@
                 Iniciar
               </button>
             </div>
+            ` : ''}
           </div>
         </div>
-      `).join('');
+      `;
+      }).join('');
 
       // Agregar event listeners a los botones
       document.querySelectorAll('.boton--vista-previa').forEach(boton => {
         boton.addEventListener('click', (e) => {
-          const rutaId = parseInt(e.target.closest('[data-ruta-id]').dataset.rutaId);
+          const tarjeta = e.target.closest('[data-ruta-id]');
+          const rutaId = parseInt(tarjeta.dataset.rutaId);
+          const rutaPlan = tarjeta.dataset.rutaPlan || 'basico';
+          
+          // Verificar si la ruta está bloqueada
+          if (rutaPlan === 'pro' && planUsuario === 'basico') {
+            alert('Esta ruta pertenece al Plan Pro. Actualiza tu plan para acceder.');
+            window.location.href = '/pages/perfil.html';
+            return;
+          }
+          
           mostrarModalRuta(rutaId);
         });
       });
 
       document.querySelectorAll('.boton--iniciar').forEach(boton => {
         boton.addEventListener('click', (e) => {
-          const rutaId = parseInt(e.target.closest('[data-ruta-id]').dataset.rutaId);
+          const tarjeta = e.target.closest('[data-ruta-id]');
+          const rutaId = parseInt(tarjeta.dataset.rutaId);
+          const rutaPlan = tarjeta.dataset.rutaPlan || 'basico';
+          
+          // Verificar si la ruta está bloqueada
+          if (rutaPlan === 'pro' && planUsuario === 'basico') {
+            alert('Esta ruta pertenece al Plan Pro. Actualiza tu plan para acceder.');
+            window.location.href = '/pages/perfil.html';
+            return;
+          }
+          
           iniciarRuta(rutaId);
         });
       });
@@ -752,6 +1128,8 @@
       document.getElementById('modal-descripcion').textContent = 'Obteniendo información de la ruta...';
       document.getElementById('puntos-lista').innerHTML = '<div class="cargando"><div class="cargando-spinner"></div><p>Cargando puntos ecológicos...</p></div>';
 
+      rutaSeleccionadaId = rutaId;
+
       try {
         // Obtener ruta completa desde Supabase
         const { data: rutaCompleta, error } = await obtenerRutaCompleta(rutaId);
@@ -792,10 +1170,130 @@
           puntosLista.innerHTML = '<p>No hay puntos ecológicos registrados para esta ruta.</p>';
         }
 
+        // Verificar si la ruta es Pro y el usuario no tiene acceso
+        if (rutaCompleta.plan === 'pro' && planUsuario !== 'pro') {
+          mostrarErrorModal('Esta ruta pertenece al Plan Pro. Actualiza tu plan para acceder.');
+          cerrarModalRuta();
+          setTimeout(() => {
+            window.location.href = '/pages/perfil.html';
+          }, 2000);
+          return;
+        }
+
+        // Mostrar mapa con coordenadas si existen (esperar un poco para que el modal sea visible)
+        setTimeout(() => {
+          mostrarMapaModalRuta(rutaCompleta);
+        }, 300);
+
       } catch (error) {
         console.error('Error inesperado al cargar ruta completa:', error);
         mostrarErrorModal('Error inesperado al cargar la ruta.');
       }
+    }
+
+    /**
+     * Muestra el mapa en el modal de vista previa con los marcadores de inicio y fin
+     */
+    let mapaModal = null;
+    function mostrarMapaModalRuta(rutaCompleta) {
+      const contenedorMapa = document.getElementById('mapa-ruta');
+      if (!contenedorMapa) {
+        console.warn('⚠️ Contenedor del mapa no existe');
+        return;
+      }
+
+      if (typeof L === 'undefined') {
+        console.warn('⚠️ Leaflet no está disponible');
+        return;
+      }
+
+      // Eliminar mapa anterior si existe
+      if (mapaModal) {
+        mapaModal.remove();
+        mapaModal = null;
+      }
+
+      // Ocultar placeholder
+      const placeholder = contenedorMapa.querySelector('.mapa-placeholder');
+      
+      // Verificar si hay coordenadas
+      if (!rutaCompleta.latitud_inicio || !rutaCompleta.longitud_inicio || 
+          !rutaCompleta.latitud_fin || !rutaCompleta.longitud_fin) {
+        if (placeholder) {
+          placeholder.innerHTML = `
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+              <circle cx="12" cy="10" r="3"/>
+            </svg>
+            <p>Mapa no disponible</p>
+            <small>Esta ruta no tiene coordenadas de inicio y fin registradas</small>
+          `;
+          placeholder.style.display = 'flex';
+        }
+        return;
+      }
+
+      // Ocultar placeholder
+      if (placeholder) {
+        placeholder.style.display = 'none';
+      }
+
+      // Crear nuevo mapa
+      const latInicio = parseFloat(rutaCompleta.latitud_inicio);
+      const lngInicio = parseFloat(rutaCompleta.longitud_inicio);
+      const latFin = parseFloat(rutaCompleta.latitud_fin);
+      const lngFin = parseFloat(rutaCompleta.longitud_fin);
+
+      // Calcular punto medio para centrar el mapa
+      const latCentro = (latInicio + latFin) / 2;
+      const lngCentro = (lngInicio + lngFin) / 2;
+
+      mapaModal = L.map('mapa-ruta').setView([latCentro, lngCentro], 12);
+
+      // Agregar capa de tiles
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© OpenStreetMap contributors',
+        maxZoom: 19
+      }).addTo(mapaModal);
+
+      // Agregar marcador de inicio
+      L.marker([latInicio, lngInicio], {
+        icon: L.icon({
+          iconUrl: 'data:image/svg+xml;base64,' + btoa(`
+            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="41" viewBox="0 0 25 41">
+              <path fill="#28a745" stroke="#fff" stroke-width="2" d="M12.5 0C5.596 0 0 5.596 0 12.5c0 12.5 12.5 28.5 12.5 28.5s12.5-16 12.5-28.5C25 5.596 19.404 0 12.5 0z"/>
+              <circle fill="#fff" cx="12.5" cy="12.5" r="6"/>
+            </svg>
+          `),
+          iconSize: [25, 41],
+          iconAnchor: [12, 41],
+          popupAnchor: [0, -41]
+        })
+      }).addTo(mapaModal).bindPopup('Punto de inicio').openPopup();
+
+      // Agregar marcador de fin
+      L.marker([latFin, lngFin], {
+        icon: L.icon({
+          iconUrl: 'data:image/svg+xml;base64,' + btoa(`
+            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="41" viewBox="0 0 25 41">
+              <path fill="#dc3545" stroke="#fff" stroke-width="2" d="M12.5 0C5.596 0 0 5.596 0 12.5c0 12.5 12.5 28.5 12.5 28.5s12.5-16 12.5-28.5C25 5.596 19.404 0 12.5 0z"/>
+              <circle fill="#fff" cx="12.5" cy="12.5" r="6"/>
+            </svg>
+          `),
+          iconSize: [25, 41],
+          iconAnchor: [12, 41],
+          popupAnchor: [0, -41]
+        })
+      }).addTo(mapaModal).bindPopup('Punto de fin');
+
+      // Dibujar línea entre inicio y fin
+      L.polyline([
+        [latInicio, lngInicio],
+        [latFin, lngFin]
+      ], { color: '#007bff', weight: 4, opacity: 0.8 }).addTo(mapaModal);
+
+      // Ajustar vista para mostrar ambos marcadores
+      mapaModal.fitBounds([[latInicio, lngInicio], [latFin, lngFin]], { padding: [20, 20] });
     }
 
     /**
@@ -814,11 +1312,58 @@
       modal.setAttribute('aria-hidden', 'true');
       modal.style.display = 'none';
       document.body.style.overflow = '';
+      
+      // Destruir mapa del modal si existe
+      if (mapaModal) {
+        mapaModal.remove();
+        mapaModal = null;
+        
+        // Mostrar placeholder nuevamente
+        const contenedorMapa = document.getElementById('mapa-ruta');
+        const placeholder = contenedorMapa?.querySelector('.mapa-placeholder');
+        if (placeholder) {
+          placeholder.style.display = 'flex';
+          placeholder.innerHTML = `
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+              <circle cx="12" cy="10" r="3"/>
+            </svg>
+            <p data-i18n="modal.mapa">Mapa interactivo</p>
+            <small data-i18n="modal.mapa.desc">Puntos de interés marcados</small>
+          `;
+        }
+      }
     }
 
-    function guardarRuta() {
-      // Simular guardado
-      alert('Ruta guardada en tus favoritos');
+    async function guardarRuta() {
+      if (!rutaSeleccionadaId) {
+        alert('Primero selecciona una ruta.');
+        return;
+      }
+
+      const boton = document.getElementById('guardar-ruta');
+      boton.disabled = true;
+
+      try {
+        const { data, error } = await guardarRutaFavorita(rutaSeleccionadaId);
+
+        if (error) {
+          if (error.message && error.message.includes('Debes iniciar sesión')) {
+            alert('Debes iniciar sesión para guardar rutas. Te redirigiremos al login.');
+            window.location.href = '/pages/login.html';
+            return;
+          }
+          alert('Error al guardar la ruta: ' + (error.message || ''));
+          return;
+        }
+
+        alert('Ruta guardada en tus favoritos');
+      } catch (e) {
+        console.error('Error inesperado al guardar ruta:', e);
+        alert('Error inesperado al guardar la ruta.');
+      } finally {
+        boton.disabled = false;
+      }
     }
 
     function iniciarRuta(rutaId) {
@@ -851,6 +1396,700 @@
         navigator.clipboard.writeText(`${nombreRuta} - ${url}`).then(() => {
           alert('Enlace copiado al portapapeles');
         });
+      }
+    }
+
+    /**
+     * 👨‍💼 ADMINISTRACIÓN DE RUTAS (SOLO ADMINISTRADORES)
+     */
+
+    /**
+     * Inicializa la sección de administración de rutas
+     */
+    async function inicializarAdminRutas() {
+      try {
+        console.log('🔍 [ADMIN] Iniciando verificación de administrador...');
+        
+        // Verificar que el botón existe en el DOM
+        const btnGestionarCheck = document.getElementById('btn-gestionar-rutas');
+        console.log('🔘 [ADMIN] Botón btn-gestionar-rutas existe:', !!btnGestionarCheck);
+        
+        esAdmin = await esAdministrador();
+        console.log('✅ [ADMIN] Resultado de esAdministrador():', esAdmin);
+        
+        const modalGestion = document.getElementById('modal-gestion-rutas');
+        console.log('📍 [ADMIN] Modal de gestión encontrado:', !!modalGestion);
+
+        if (!esAdmin) {
+          console.log('❌ Usuario no es administrador o no se pudo verificar');
+          // Verificar manualmente el rol para debug
+          try {
+            const { supabase } = await import("/src/services/supabase.js");
+            const { data: { user } } = await supabase.auth.getUser();
+            if (user) {
+              console.log('👤 Usuario ID:', user.id);
+              const { data: perfil, error: perfilError } = await supabase
+                .from('usuarios_perfiles')
+                .select('rol, nombre, apellido')
+                .eq('id', user.id)
+                .single();
+              console.log('📋 Perfil encontrado:', perfil);
+              console.log('❌ Error al obtener perfil:', perfilError);
+              if (perfil) {
+                console.log('🎭 Rol actual:', perfil.rol);
+                console.log('🔍 Comparación:', `"${perfil.rol}" === "administrador" = ${perfil.rol === 'administrador'}`);
+                
+                // Si el rol es administrador pero esAdministrador() retornó false, forzar mostrar botón
+                if (perfil.rol === 'administrador') {
+                  console.log('⚠️ Rol es administrador pero esAdministrador() retornó false. Forzando mostrar botón...');
+                  esAdmin = true; // Forzar a true para continuar
+                }
+              } else {
+                console.log('⚠️ No se encontró perfil en la base de datos');
+              }
+            } else {
+              console.log('⚠️ No hay usuario autenticado');
+            }
+          } catch (debugErr) {
+            console.error('Error en debug:', debugErr);
+          }
+          
+          // Si después del debug sigue sin ser admin, salir
+          if (!esAdmin) {
+            console.log('❌ Finalmente no es administrador, ocultando funcionalidad');
+            return;
+          }
+        }
+
+        if (!modalGestion) {
+          console.error('❌ No se encontró el modal de gestión en el DOM');
+          return;
+        }
+
+        // Configurar modal de gestión de rutas
+        console.log('✅ Configurando modal de gestión de rutas');
+        const btnGestionar = document.getElementById('btn-gestionar-rutas');
+        const btnCerrarModal = document.getElementById('modal-gestion-rutas-cerrar');
+        const overlayModal = modalGestion.querySelector('.modal__overlay');
+        
+        // Función para abrir el modal
+        function abrirModalGestion() {
+          modalGestion.setAttribute('aria-hidden', 'false');
+          modalGestion.style.display = 'flex';
+          document.body.style.overflow = 'hidden';
+          
+          // Inicializar el mapa cuando se abre el modal (después de que sea visible)
+          setTimeout(() => {
+            if (typeof L !== 'undefined') {
+              if (!mapaAdmin) {
+                // Inicializar el mapa si no existe
+                inicializarMapaAdmin();
+              } else {
+                // Si el mapa ya existe, ajustar su tamaño
+                mapaAdmin.invalidateSize();
+              }
+            } else {
+              console.error('❌ Leaflet no está disponible. Verifica que el script de Leaflet se cargó correctamente.');
+            }
+          }, 200); // Esperar 200ms para que el modal sea visible
+        }
+        
+        // Función para cerrar el modal
+        function cerrarModalGestion() {
+          modalGestion.setAttribute('aria-hidden', 'true');
+          modalGestion.style.display = 'none';
+          document.body.style.overflow = '';
+        }
+        
+        // Mostrar botón de gestión
+        if (btnGestionar) {
+          console.log('✅ Botón de gestión encontrado, mostrándolo...');
+          btnGestionar.style.display = 'inline-flex';
+          btnGestionar.addEventListener('click', abrirModalGestion);
+          console.log('✅ Botón de gestión configurado y visible');
+        } else {
+          console.error('❌ No se encontró el botón btn-gestionar-rutas en el DOM');
+        }
+        
+        // Cerrar modal con botón X
+        if (btnCerrarModal) {
+          btnCerrarModal.addEventListener('click', cerrarModalGestion);
+        }
+        
+        // Cerrar modal con overlay
+        if (overlayModal) {
+          overlayModal.addEventListener('click', cerrarModalGestion);
+        }
+        
+        // Cerrar modal con Escape
+        document.addEventListener('keydown', (e) => {
+          if (e.key === 'Escape' && modalGestion.getAttribute('aria-hidden') === 'false') {
+            cerrarModalGestion();
+          }
+        });
+        
+        // El modal empieza oculto
+        modalGestion.style.display = 'none';
+
+        // Botón nueva ruta
+        document.getElementById('admin-nueva-ruta').addEventListener('click', () => {
+          limpiarFormularioAdmin();
+          document.getElementById('admin-form-titulo').textContent = 'Crear Nueva Ruta';
+          document.getElementById('admin-cancelar-edicion').style.display = 'none';
+        });
+
+        // Botón cancelar edición
+        document.getElementById('admin-cancelar-edicion').addEventListener('click', () => {
+          limpiarFormularioAdmin();
+          document.getElementById('admin-form-titulo').textContent = 'Crear Nueva Ruta';
+          document.getElementById('admin-cancelar-edicion').style.display = 'none';
+        });
+
+        // Formulario de guardar/editar
+        document.getElementById('admin-ruta-form').addEventListener('submit', handleSubmitRutaAdmin);
+
+        // Inicializar subida de imágenes
+        inicializarSubidaImagenAdmin();
+
+        // NO inicializar el mapa aquí - se inicializará cuando se abra el modal
+        // (para evitar problemas cuando el contenedor está oculto)
+
+        // Cargar lista de rutas para administración
+        await cargarRutasAdmin();
+      } catch (e) {
+        console.error('Error al inicializar administración de rutas:', e);
+      }
+    }
+
+    /**
+     * Carga todas las rutas para la lista de administración
+     */
+    async function cargarRutasAdmin() {
+      const contenedor = document.getElementById('admin-rutas-lista');
+      const mensaje = document.getElementById('admin-rutas-mensaje');
+      
+      if (!contenedor) return;
+
+      contenedor.innerHTML = '<p>Cargando rutas para administración...</p>';
+      if (mensaje) {
+        mensaje.style.display = 'none';
+        mensaje.textContent = '';
+      }
+
+      try {
+        const { data, error } = await obtenerTodasLasRutas();
+        
+        if (error) {
+          console.error('Error al obtener todas las rutas:', error);
+          contenedor.innerHTML = '<p>Error al cargar rutas para administración.</p>';
+          return;
+        }
+
+        const rutas = (data || []).map(convertirRutaFormato);
+
+        if (!rutas.length) {
+          contenedor.innerHTML = '<p>No hay rutas registradas aún.</p>';
+          return;
+        }
+
+        contenedor.innerHTML = rutas.map(ruta => `
+          <div class="tarjeta-ruta tarjeta-ruta--admin" data-admin-ruta-id="${ruta.id}" style="margin-bottom: 1rem; padding: 1rem; border: 1px solid #ddd; border-radius: 8px;">
+            <div class="tarjeta-ruta__contenido">
+              <h4 class="tarjeta-ruta__titulo">${ruta.nombre}</h4>
+              <p class="tarjeta-ruta__descripcion">${ruta.descripcion}</p>
+              <div class="tarjeta-ruta__meta" style="margin-top: 0.5rem; font-size: 0.9rem; color: #666;">
+                <span>📍 ${ruta.ubicacion}</span> ·
+                <span>📏 ${ruta.distancia}</span> ·
+                <span>⏱️ ${ruta.duracion}</span> ·
+                <span>⚡ ${getDificultadTexto(ruta.dificultad)}</span>
+              </div>
+            </div>
+            <div class="tarjeta-ruta__acciones" style="margin-top: 1rem; display: flex; gap: 0.5rem;">
+              <button class="boton secundario admin-editar-ruta" data-admin-ruta-id="${ruta.id}">Editar</button>
+              <button class="boton secundario admin-eliminar-ruta" data-admin-ruta-id="${ruta.id}" style="background-color: #dc3545; color: white;">Eliminar</button>
+            </div>
+          </div>
+        `).join('');
+
+        // Event listeners para editar
+        contenedor.querySelectorAll('.admin-editar-ruta').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const id = parseInt(btn.getAttribute('data-admin-ruta-id'));
+            const ruta = rutas.find(r => r.id === id);
+            if (ruta) {
+              llenarFormularioAdmin(ruta);
+            }
+          });
+        });
+
+        // Event listeners para eliminar
+        contenedor.querySelectorAll('.admin-eliminar-ruta').forEach(btn => {
+          btn.addEventListener('click', async () => {
+            const id = parseInt(btn.getAttribute('data-admin-ruta-id'));
+            if (confirm('¿Estás seguro de que deseas eliminar esta ruta? Esta acción no se puede deshacer.')) {
+              await eliminarRutaAdmin(id);
+            }
+          });
+        });
+      } catch (error) {
+        console.error('Error inesperado al cargar rutas admin:', error);
+        contenedor.innerHTML = '<p>Error inesperado al cargar rutas.</p>';
+      }
+    }
+
+    /**
+     * Inicializa el mapa de administración con Leaflet
+     */
+    let mapaAdmin = null;
+    let marcadorInicio = null;
+    let marcadorFin = null;
+
+    function inicializarMapaAdmin() {
+      const contenedorMapa = document.getElementById('admin-mapa-ruta');
+      
+      if (!contenedorMapa) {
+        console.warn('⚠️ El contenedor del mapa (admin-mapa-ruta) no existe');
+        return;
+      }
+
+      if (typeof L === 'undefined') {
+        console.error('❌ Leaflet no está disponible. Verifica que el script de Leaflet se haya cargado correctamente.');
+        // Mostrar mensaje en el contenedor del mapa
+        contenedorMapa.innerHTML = '<div style="padding: 2rem; text-align: center; color: #dc3545;"><p>Error: Leaflet no está disponible. Por favor, recarga la página.</p></div>';
+        return;
+      }
+
+      // Inicializar mapa centrado en España
+      mapaAdmin = L.map('admin-mapa-ruta').setView([40.4168, -3.7038], 6);
+
+      // Agregar capa de tiles
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© OpenStreetMap contributors',
+        maxZoom: 19
+      }).addTo(mapaAdmin);
+
+      // Manejar clics en el mapa
+      mapaAdmin.on('click', (e) => {
+        const { lat, lng } = e.latlng;
+
+        // Si no hay marcador de inicio, crear el de inicio (verde)
+        if (!marcadorInicio) {
+          if (marcadorFin) {
+            mapaAdmin.removeLayer(marcadorFin);
+            marcadorFin = null;
+            document.getElementById('admin-latitud-fin').value = '';
+            document.getElementById('admin-longitud-fin').value = '';
+          }
+          
+          marcadorInicio = L.marker([lat, lng], {
+            icon: L.icon({
+              iconUrl: 'data:image/svg+xml;base64,' + btoa(`
+                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="41" viewBox="0 0 25 41">
+                  <path fill="#28a745" stroke="#fff" stroke-width="2" d="M12.5 0C5.596 0 0 5.596 0 12.5c0 12.5 12.5 28.5 12.5 28.5s12.5-16 12.5-28.5C25 5.596 19.404 0 12.5 0z"/>
+                  <circle fill="#fff" cx="12.5" cy="12.5" r="6"/>
+                </svg>
+              `),
+              iconSize: [25, 41],
+              iconAnchor: [12, 41],
+              popupAnchor: [0, -41]
+            })
+          }).addTo(mapaAdmin).bindPopup('Punto de inicio').openPopup();
+
+          document.getElementById('admin-latitud-inicio').value = lat.toFixed(8);
+          document.getElementById('admin-longitud-inicio').value = lng.toFixed(8);
+        }
+        // Si ya hay marcador de inicio pero no de fin, crear el de fin (rojo)
+        else if (!marcadorFin) {
+          marcadorFin = L.marker([lat, lng], {
+            icon: L.icon({
+              iconUrl: 'data:image/svg+xml;base64,' + btoa(`
+                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="41" viewBox="0 0 25 41">
+                  <path fill="#dc3545" stroke="#fff" stroke-width="2" d="M12.5 0C5.596 0 0 5.596 0 12.5c0 12.5 12.5 28.5 12.5 28.5s12.5-16 12.5-28.5C25 5.596 19.404 0 12.5 0z"/>
+                  <circle fill="#fff" cx="12.5" cy="12.5" r="6"/>
+                </svg>
+              `),
+              iconSize: [25, 41],
+              iconAnchor: [12, 41],
+              popupAnchor: [0, -41]
+            })
+          }).addTo(mapaAdmin).bindPopup('Punto de fin').openPopup();
+
+          document.getElementById('admin-latitud-fin').value = lat.toFixed(8);
+          document.getElementById('admin-longitud-fin').value = lng.toFixed(8);
+
+          // Dibujar línea entre inicio y fin
+          if (marcadorInicio && marcadorFin) {
+            L.polyline([
+              [marcadorInicio.getLatLng().lat, marcadorInicio.getLatLng().lng],
+              [marcadorFin.getLatLng().lat, marcadorFin.getLatLng().lng]
+            ], { color: '#007bff', weight: 3, opacity: 0.7 }).addTo(mapaAdmin);
+            mapaAdmin.fitBounds([[marcadorInicio.getLatLng().lat, marcadorInicio.getLatLng().lng], 
+                                 [marcadorFin.getLatLng().lat, marcadorFin.getLatLng().lng]], 
+                                { padding: [50, 50] });
+          }
+        }
+        // Si ya hay ambos, reiniciar con el nuevo clic como inicio
+        else {
+          mapaAdmin.eachLayer((layer) => {
+            if (layer instanceof L.Marker || layer instanceof L.Polyline) {
+              mapaAdmin.removeLayer(layer);
+            }
+          });
+          marcadorInicio = null;
+          marcadorFin = null;
+          document.getElementById('admin-latitud-inicio').value = '';
+          document.getElementById('admin-longitud-inicio').value = '';
+          document.getElementById('admin-latitud-fin').value = '';
+          document.getElementById('admin-longitud-fin').value = '';
+          
+          // Crear nuevo marcador de inicio
+          marcadorInicio = L.marker([lat, lng], {
+            icon: L.icon({
+              iconUrl: 'data:image/svg+xml;base64,' + btoa(`
+                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="41" viewBox="0 0 25 41">
+                  <path fill="#28a745" stroke="#fff" stroke-width="2" d="M12.5 0C5.596 0 0 5.596 0 12.5c0 12.5 12.5 28.5 12.5 28.5s12.5-16 12.5-28.5C25 5.596 19.404 0 12.5 0z"/>
+                  <circle fill="#fff" cx="12.5" cy="12.5" r="6"/>
+                </svg>
+              `),
+              iconSize: [25, 41],
+              iconAnchor: [12, 41],
+              popupAnchor: [0, -41]
+            })
+          }).addTo(mapaAdmin).bindPopup('Punto de inicio').openPopup();
+
+          document.getElementById('admin-latitud-inicio').value = lat.toFixed(8);
+          document.getElementById('admin-longitud-inicio').value = lng.toFixed(8);
+        }
+      });
+    }
+
+    /**
+     * Inicializa la funcionalidad de subida de imágenes
+     */
+    function inicializarSubidaImagenAdmin() {
+      const inputFile = document.getElementById('admin-imagen-file');
+      const btnSubir = document.getElementById('admin-btn-subir-imagen');
+      const preview = document.getElementById('admin-imagen-preview');
+      const previewImg = document.getElementById('admin-imagen-preview-img');
+      const btnEliminar = document.getElementById('admin-btn-eliminar-imagen');
+      const inputUrlManual = document.getElementById('admin-imagen');
+
+      if (!inputFile || !btnSubir) return;
+
+      // Al hacer clic en el botón, activar el input file
+      btnSubir.addEventListener('click', () => {
+        inputFile.click();
+      });
+
+      // Al seleccionar un archivo
+      inputFile.addEventListener('change', (e) => {
+        const archivo = e.target.files[0];
+        if (archivo) {
+          const tiposPermitidos = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
+          if (!tiposPermitidos.includes(archivo.type)) {
+            alert('Tipo de archivo no permitido. Use JPG, PNG o WEBP');
+            return;
+          }
+
+          if (archivo.size > 5 * 1024 * 1024) {
+            alert('La imagen es demasiado grande. Máximo 5MB');
+            return;
+          }
+
+          // Mostrar vista previa
+          const reader = new FileReader();
+          reader.onload = (e) => {
+            previewImg.src = e.target.result;
+            preview.style.display = 'block';
+            btnSubir.textContent = 'Cambiar Imagen';
+            inputUrlManual.value = '';
+          };
+          reader.readAsDataURL(archivo);
+        }
+      });
+
+      // Eliminar imagen
+      btnEliminar.addEventListener('click', () => {
+        inputFile.value = '';
+        preview.style.display = 'none';
+        previewImg.src = '';
+        btnSubir.textContent = 'Subir Imagen';
+        document.getElementById('admin-imagen-url').value = '';
+        inputUrlManual.value = '';
+      });
+
+      // Si se ingresa URL manual, limpiar el archivo
+      inputUrlManual.addEventListener('input', () => {
+        if (inputUrlManual.value) {
+          inputFile.value = '';
+          preview.style.display = 'none';
+          document.getElementById('admin-imagen-url').value = inputUrlManual.value;
+        }
+      });
+    }
+
+    /**
+     * Limpia el formulario de administración
+     */
+    function limpiarFormularioAdmin() {
+      document.getElementById('admin-ruta-id').value = '';
+      document.getElementById('admin-nombre').value = '';
+      document.getElementById('admin-descripcion').value = '';
+      document.getElementById('admin-imagen-file').value = '';
+      document.getElementById('admin-imagen').value = '';
+      document.getElementById('admin-imagen-url').value = '';
+      document.getElementById('admin-imagen-preview').style.display = 'none';
+      document.getElementById('admin-btn-subir-imagen').textContent = 'Subir Imagen';
+      document.getElementById('admin-dificultad').value = '';
+      document.getElementById('admin-duracion').value = '';
+      document.getElementById('admin-distancia').value = '';
+      document.getElementById('admin-ubicacion').value = '';
+      document.getElementById('admin-tipo').value = '';
+      document.getElementById('admin-puntuacion').value = '0';
+      document.getElementById('admin-plan').value = 'basico';
+      document.getElementById('admin-latitud-inicio').value = '';
+      document.getElementById('admin-longitud-inicio').value = '';
+      document.getElementById('admin-latitud-fin').value = '';
+      document.getElementById('admin-longitud-fin').value = '';
+      
+      // Limpiar mapa si existe
+      if (mapaAdmin) {
+        mapaAdmin.eachLayer((layer) => {
+          if (layer instanceof L.Marker || layer instanceof L.Polyline) {
+            mapaAdmin.removeLayer(layer);
+          }
+        });
+        marcadorInicio = null;
+        marcadorFin = null;
+        if (mapaAdmin.getCenter) {
+          mapaAdmin.setView([40.4168, -3.7038], 6);
+        }
+      }
+      
+      const mensaje = document.getElementById('admin-rutas-mensaje');
+      if (mensaje) {
+        mensaje.style.display = 'none';
+        mensaje.textContent = '';
+      }
+    }
+
+    /**
+     * Llena el formulario con los datos de una ruta para editar
+     */
+    function llenarFormularioAdmin(ruta) {
+      document.getElementById('admin-ruta-id').value = ruta.id;
+      document.getElementById('admin-nombre').value = ruta.nombre;
+      document.getElementById('admin-descripcion').value = ruta.descripcion;
+      // Manejar imagen
+      if (ruta.imagen) {
+        document.getElementById('admin-imagen-url').value = ruta.imagen;
+        document.getElementById('admin-imagen').value = ruta.imagen;
+        document.getElementById('admin-imagen-preview-img').src = ruta.imagen;
+        document.getElementById('admin-imagen-preview').style.display = 'block';
+        document.getElementById('admin-btn-subir-imagen').textContent = 'Cambiar Imagen';
+      }
+      
+      document.getElementById('admin-dificultad').value = ruta.dificultad || '';
+      
+      // Parsear duración (formato: "Xh" o número)
+      const duracionStr = String(ruta.duracion || '').replace('h', '').trim();
+      document.getElementById('admin-duracion').value = parseFloat(duracionStr) || '';
+      
+      // Parsear distancia (formato: "X km" o número)
+      const distanciaStr = String(ruta.distancia || '').replace('km', '').trim();
+      document.getElementById('admin-distancia').value = parseFloat(distanciaStr) || '';
+      
+      document.getElementById('admin-ubicacion').value = ruta.ubicacion || '';
+      document.getElementById('admin-tipo').value = ruta.tipo || '';
+      document.getElementById('admin-puntuacion').value = ruta.puntuacion || 0;
+      document.getElementById('admin-plan').value = ruta.plan || 'basico';
+
+      document.getElementById('admin-form-titulo').textContent = 'Editar Ruta';
+      document.getElementById('admin-cancelar-edicion').style.display = 'inline-block';
+    }
+
+    /**
+     * Maneja el envío del formulario de crear/editar ruta
+     */
+    async function handleSubmitRutaAdmin(e) {
+      e.preventDefault();
+      const mensaje = document.getElementById('admin-rutas-mensaje');
+      const botonGuardar = document.getElementById('admin-guardar-btn');
+      
+      if (mensaje) {
+        mensaje.style.display = 'none';
+        mensaje.textContent = '';
+      }
+
+      const id = document.getElementById('admin-ruta-id').value;
+      
+      // Manejar imagen: primero intentar usar URL manual, luego archivo subido
+      const inputFile = document.getElementById('admin-imagen-file');
+      const inputUrlManual = document.getElementById('admin-imagen');
+      const inputUrlHidden = document.getElementById('admin-imagen-url');
+      
+      let imagenUrl = inputUrlManual.value.trim() || inputUrlHidden.value.trim() || null;
+
+      // Si hay archivo seleccionado, intentar subirlo
+      if (inputFile.files.length > 0 && !imagenUrl) {
+        botonGuardar.disabled = true;
+        botonGuardar.textContent = 'Subiendo imagen...';
+        
+        try {
+          const archivo = inputFile.files[0];
+          const { url, error: errorImagen } = await subirImagenRuta(archivo, id ? parseInt(id) : null);
+          
+          if (errorImagen) {
+            // Si falla la subida, mostrar advertencia pero permitir continuar con URL manual
+            console.warn('Advertencia: No se pudo subir la imagen:', errorImagen.message);
+            if (mensaje && !inputUrlManual.value.trim()) {
+              mensaje.textContent = 'Advertencia: No se pudo subir la imagen. Puedes usar una URL manual o intentar más tarde.';
+              mensaje.style.display = 'block';
+              mensaje.className = 'auth-error';
+              botonGuardar.disabled = false;
+              botonGuardar.textContent = 'Guardar Ruta';
+              return;
+            }
+          } else if (url) {
+            imagenUrl = url;
+            inputUrlHidden.value = url;
+          }
+        } catch (error) {
+          console.warn('Error al subir imagen:', error);
+          if (!inputUrlManual.value.trim()) {
+            if (mensaje) {
+              mensaje.textContent = 'Advertencia: Error al subir la imagen. Usa una URL manual o intenta más tarde.';
+              mensaje.style.display = 'block';
+              mensaje.className = 'auth-error';
+            }
+            botonGuardar.disabled = false;
+            botonGuardar.textContent = 'Guardar Ruta';
+            return;
+          }
+        }
+      }
+      
+      const rutaData = {
+        nombre: document.getElementById('admin-nombre').value.trim(),
+        descripcion: document.getElementById('admin-descripcion').value.trim(),
+        imagen_url: imagenUrl,
+        dificultad: document.getElementById('admin-dificultad').value,
+        duracion_horas: parseFloat(document.getElementById('admin-duracion').value),
+        distancia_km: parseFloat(document.getElementById('admin-distancia').value),
+        ubicacion: document.getElementById('admin-ubicacion').value.trim(),
+        tipo: document.getElementById('admin-tipo').value,
+        puntuacion: parseFloat(document.getElementById('admin-puntuacion').value || '0'),
+        plan: document.getElementById('admin-plan').value,
+        activa: true
+      };
+
+      // Agregar coordenadas si están presentes (opcional, no bloquea si no existen las columnas)
+      const latInicio = document.getElementById('admin-latitud-inicio').value ? parseFloat(document.getElementById('admin-latitud-inicio').value) : null;
+      const lngInicio = document.getElementById('admin-longitud-inicio').value ? parseFloat(document.getElementById('admin-longitud-inicio').value) : null;
+      const latFin = document.getElementById('admin-latitud-fin').value ? parseFloat(document.getElementById('admin-latitud-fin').value) : null;
+      const lngFin = document.getElementById('admin-longitud-fin').value ? parseFloat(document.getElementById('admin-longitud-fin').value) : null;
+
+      // Solo agregar coordenadas si están todas presentes
+      if (latInicio !== null && lngInicio !== null && latFin !== null && lngFin !== null) {
+        rutaData.latitud_inicio = latInicio;
+        rutaData.longitud_inicio = lngInicio;
+        rutaData.latitud_fin = latFin;
+        rutaData.longitud_fin = lngFin;
+      }
+
+      botonGuardar.disabled = true;
+      botonGuardar.textContent = 'Guardando...';
+
+      try {
+        let resp;
+        if (id) {
+          // Actualizar ruta existente
+          resp = await actualizarRuta(parseInt(id), rutaData);
+        } else {
+          // Crear nueva ruta
+          resp = await crearRuta(rutaData);
+        }
+
+        if (resp.error) {
+          console.error('Error al guardar ruta (admin):', resp.error);
+          if (mensaje) {
+            mensaje.textContent = 'Error al guardar la ruta: ' + (resp.error.message || 'Error desconocido');
+            mensaje.style.display = 'block';
+            mensaje.className = 'auth-error';
+          }
+          return;
+        }
+
+        // Éxito
+        if (mensaje) {
+          mensaje.textContent = '✅ Ruta guardada correctamente.';
+          mensaje.style.display = 'block';
+          mensaje.className = 'auth-success';
+        }
+
+        limpiarFormularioAdmin();
+        document.getElementById('admin-form-titulo').textContent = 'Crear Nueva Ruta';
+        document.getElementById('admin-cancelar-edicion').style.display = 'none';
+
+        // Recargar listas
+        await inicializarRutas();
+        await cargarRutasAdmin();
+
+      } catch (e) {
+        console.error('Error inesperado al guardar ruta (admin):', e);
+        if (mensaje) {
+          mensaje.textContent = 'Error inesperado al guardar la ruta.';
+          mensaje.style.display = 'block';
+          mensaje.className = 'auth-error';
+        }
+      } finally {
+        botonGuardar.disabled = false;
+        botonGuardar.textContent = 'Guardar Ruta';
+      }
+    }
+
+    /**
+     * Elimina una ruta (solo administradores)
+     */
+    async function eliminarRutaAdmin(id) {
+      const mensaje = document.getElementById('admin-rutas-mensaje');
+      
+      if (mensaje) {
+        mensaje.style.display = 'none';
+        mensaje.textContent = '';
+      }
+
+      try {
+        const { data, error } = await eliminarRuta(id);
+        
+        if (error) {
+          console.error('Error al eliminar ruta (admin):', error);
+          if (mensaje) {
+            mensaje.textContent = 'Error al eliminar la ruta: ' + (error.message || 'Error desconocido');
+            mensaje.style.display = 'block';
+            mensaje.className = 'auth-error';
+          }
+          return;
+        }
+
+        // Éxito
+        if (mensaje) {
+          mensaje.textContent = '✅ Ruta eliminada correctamente.';
+          mensaje.style.display = 'block';
+          mensaje.className = 'auth-success';
+        }
+
+        // Recargar listas
+        await inicializarRutas();
+        await cargarRutasAdmin();
+
+      } catch (e) {
+        console.error('Error inesperado al eliminar ruta (admin):', e);
+        if (mensaje) {
+          mensaje.textContent = 'Error inesperado al eliminar la ruta.';
+          mensaje.style.display = 'block';
+          mensaje.className = 'auth-error';
+        }
       }
     }
   </script>

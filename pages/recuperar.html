@@ -6,11 +6,27 @@
   <title>Recuperar Contraseña — Rutas Eco-Comunitarias</title>
   <link rel="stylesheet" href="/src/styles.css">
   
+  <!-- Script anti-flash: aplica tema y accesibilidad inmediatamente -->
   <script>
     (function() {
+      // Aplicar contraste alto
       const contrasteGuardado = localStorage.getItem('contrasteAlto');
       if (contrasteGuardado === 'true') {
         document.documentElement.setAttribute('data-contraste', 'alto');
+      }
+      
+      // Aplicar tamaño de texto guardado
+      const tamañoTexto = localStorage.getItem('tamañoTexto');
+      if (tamañoTexto) {
+        document.documentElement.style.fontSize = tamañoTexto + '%';
+      }
+      
+      // Aplicar otras configuraciones de accesibilidad
+      if (localStorage.getItem('alertasActivas') === 'true') {
+        document.documentElement.setAttribute('data-alertas', 'activas');
+      }
+      if (localStorage.getItem('lecturaVoz') === 'true') {
+        document.documentElement.setAttribute('data-lectura-voz', 'activa');
       }
     })();
   </script>
@@ -43,15 +59,55 @@
     </div>
   </main>
 
-  <footer class="pie">
-    <small>© <span id="ano"></span> <span data-i18n="footer.derechos">Rutas Eco-Comunitarias</span></small>
+  <footer class="pie-profesional">
+    <div class="pie-contenido">
+      
+      <div class="pie-columna pie-columna--brand">
+        <img src="/src/logo-placeholder.svg" alt="Logo Plataforma" class="logo">
+        <h3 class="nombre-sistema">Rutas Eco-Comunitarias</h3>
+        <p>Conectando la naturaleza con la comunidad de forma sostenible.</p>
+      </div>
+      
+      <div class="pie-columna">
+        <h4>Navegación</h4>
+        <ul>
+          <li><a href="/index.html" class="pie-link" data-i18n="nav.inicio">Inicio</a></li>
+          <li><a href="/pages/rutas.html" class="pie-link" data-i18n="nav.rutas">Rutas</a></li>
+          <li><a href="/pages/novedades.html" class="pie-link" data-i18n="nav.novedades">Novedades</a></li>
+        </ul>
+      </div>
+      
+      <div class="pie-columna">
+        <h4>Soporte</h4>
+        <ul>
+          <li><a href="/pages/ayuda.html" class="pie-link" id="link-soporte" data-i18n="footer.soporte">Ayuda / Contacto</a></li>
+          <li><a href="/pages/terminos.html" class="pie-link" target="_blank" rel="noopener noreferrer">Términos y Privacidad</a></li>
+        </ul>
+      </div>
+      
+      <div class="pie-columna">
+        <h4>Síguenos</h4>
+        <div class="pie-sociales">
+          <a href="#" class="pie-social-link" aria-label="Facebook">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>
+          </a>
+          <a href="#" class="pie-social-link" aria-label="Instagram">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.07 1.646.07 4.85s-.012 3.584-.07 4.85c-.148 3.227-1.664 4.771-4.919 4.919-1.266.058-1.646.07-4.85.07s-3.584-.012-4.85-.07c-3.252-.148-4.771-1.691-4.919-4.919-.058-1.265-.07-1.646-.07-4.85s.012-3.584.07-4.85c.148-3.227 1.664 4.771 4.919-4.919C8.416 2.175 8.796 2.163 12 2.163zm0 1.62c-3.14 0-3.486.01-4.708.066-2.678.122-3.83 1.274-3.952 3.952C3.27 8.92 3.26 9.266 3.26 12s.01 3.08.066 4.708c.122 2.678 1.274 3.83 3.952 3.952C8.51 20.73 8.86 20.74 12 20.74s3.08-.01 4.708-.066c2.678-.122 3.83-1.274 3.952-3.952C20.73 15.08 20.74 14.734 20.74 12s-.01-3.08-.066-4.708c-.122-2.678-1.274-3.83-3.952-3.952C15.09 3.27 14.74 3.26 12 3.26zm0 2.92c-2.92 0-5.28 2.36-5.28 5.28s2.36 5.28 5.28 5.28 5.28-2.36 5.28-5.28-2.36-5.28-5.28-5.28zm0 8.52c-1.8 0-3.24-1.44-3.24-3.24s1.44-3.24 3.24-3.24 3.24 1.44 3.24 3.24-1.44 3.24-3.24 3.24zM16.965 6.57c-.7 0-1.275.575-1.275 1.275s.575 1.275 1.275 1.275 1.275-.575 1.275-1.275-.575-1.275-1.275-1.275z"></path></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+    
+    <div class="pie-bottom-bar">
+      <small>© <span id="ano"></span> <span data-i18n="footer.derechos">Rutas Eco-Comunitarias</span>. Todos los derechos reservados.</small>
+    </div>
   </footer>
   
   <div id="modal-accesibilidad" class="modal" role="dialog" aria-labelledby="modal-accesibilidad-titulo" aria-hidden="true">
     </div>
 
   <script type="module">
-    import { inicializarTema, actualizarAnio, inicializarMenu } from "/src/scripts/comunes.ts";
+    import { inicializarTema, actualizarAnio, inicializarMenu, inicializarSesionUI, inicializarAtajosTeclado } from "/src/scripts/comunes.ts";
     import { inicializarIdiomas, inicializarAccesibilidad } from "/src/scripts/idiomas.js";
     import { supabase } from "/src/services/supabase.js";
 
@@ -61,6 +117,8 @@
       inicializarMenu();
       inicializarIdiomas();
       inicializarAccesibilidad();
+      inicializarSesionUI();
+      inicializarAtajosTeclado();
       
       document.getElementById('form-recuperar').addEventListener('submit', handleRecuperar);
     });

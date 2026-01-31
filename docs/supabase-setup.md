@@ -64,6 +64,22 @@ CREATE TABLE usuarios_perfiles (
 CREATE INDEX idx_usuarios_rol ON usuarios_perfiles(rol);
 ```
 
+### Tabla: `rutas_favoritas`
+```sql
+-- Crear tabla de rutas favoritas (guardadas por usuarios)
+CREATE TABLE rutas_favoritas (
+  id SERIAL PRIMARY KEY,
+  usuario_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
+  ruta_id INTEGER NOT NULL REFERENCES rutas(id) ON DELETE CASCADE,
+  fecha_guardado TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  UNIQUE(usuario_id, ruta_id) -- Evitar duplicados: un usuario no puede guardar la misma ruta dos veces
+);
+
+-- Índices para optimizar consultas
+CREATE INDEX idx_favoritas_usuario_id ON rutas_favoritas(usuario_id);
+CREATE INDEX idx_favoritas_ruta_id ON rutas_favoritas(ruta_id);
+```
+
 ## 🔐 Políticas de Seguridad (RLS)
 
 ### Políticas para tabla `rutas`
@@ -154,6 +170,24 @@ CREATE POLICY "Usuarios pueden crear su perfil" ON usuarios_perfiles
   FOR INSERT WITH CHECK (id = auth.uid());
 ```
 
+### Políticas para tabla `rutas_favoritas`
+```sql
+-- Habilitar RLS
+ALTER TABLE rutas_favoritas ENABLE ROW LEVEL SECURITY;
+
+-- Usuarios pueden ver solo sus propias rutas favoritas
+CREATE POLICY "Usuarios pueden ver sus rutas favoritas" ON rutas_favoritas
+  FOR SELECT USING (usuario_id = auth.uid());
+
+-- Usuarios pueden guardar rutas en sus favoritos
+CREATE POLICY "Usuarios pueden guardar rutas favoritas" ON rutas_favoritas
+  FOR INSERT WITH CHECK (usuario_id = auth.uid());
+
+-- Usuarios pueden eliminar sus propias rutas favoritas
+CREATE POLICY "Usuarios pueden eliminar sus rutas favoritas" ON rutas_favoritas
+  FOR DELETE USING (usuario_id = auth.uid());
+```
+
 ## 🚀 Configuración Inicial
 
 ### 1. Variables de Entorno
@@ -162,6 +196,72 @@ Crear archivo `.env.local`:
 VITE_SUPABASE_URL=tu_url_de_supabase
 VITE_SUPABASE_ANON_KEY=tu_clave_anonima
 ```
+
+### 2. Trigger para Crear Perfiles Automáticamente
+**IMPORTANTE:** Ejecuta este SQL completo en el SQL Editor de Supabase para que los perfiles se creen automáticamente cuando un usuario se registra:
+
+```sql
+-- PASO 1: Eliminar políticas existentes que puedan estar bloqueando
+DROP POLICY IF EXISTS "Usuarios pueden crear su perfil" ON public.usuarios_perfiles;
+DROP POLICY IF EXISTS "Trigger puede crear perfiles automáticamente" ON public.usuarios_perfiles;
+
+-- PASO 2: Crear la función del trigger
+CREATE OR REPLACE FUNCTION public.handle_new_user()
+RETURNS TRIGGER AS $$
+BEGIN
+  INSERT INTO public.usuarios_perfiles (
+    id,
+    nombre,
+    apellido,
+    telefono,
+    rol
+  )
+  VALUES (
+    NEW.id,
+    NEW.raw_user_meta_data->>'nombre',
+    NEW.raw_user_meta_data->>'apellido',
+    NEW.raw_user_meta_data->>'telefono',
+    COALESCE(NEW.raw_user_meta_data->>'rol', 'cliente')
+  )
+  ON CONFLICT (id) DO NOTHING;
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER SET search_path = public;
+
+-- PASO 3: Crear el trigger
+DROP TRIGGER IF EXISTS on_auth_user_created ON auth.users;
+CREATE TRIGGER on_auth_user_created
+  AFTER INSERT ON auth.users
+  FOR EACH ROW
+  EXECUTE FUNCTION public.handle_new_user();
+
+-- PASO 4: Política RLS para usuarios normales
+CREATE POLICY "Usuarios pueden crear su perfil" ON public.usuarios_perfiles
+  FOR INSERT 
+  WITH CHECK (id = auth.uid());
+
+-- PASO 5: Política RLS para el trigger (permite inserción automática)
+CREATE POLICY "Trigger puede crear perfiles automáticamente" ON public.usuarios_perfiles
+  FOR INSERT
+  WITH CHECK (true);
+```
+
+**Si ya tienes usuarios registrados antes de crear este trigger**, ejecuta este SQL para crear sus perfiles:
+
+```sql
+INSERT INTO public.usuarios_perfiles (id, nombre, apellido, telefono, rol)
+SELECT 
+  id,
+  raw_user_meta_data->>'nombre',
+  raw_user_meta_data->>'apellido',
+  raw_user_meta_data->>'telefono',
+  COALESCE(raw_user_meta_data->>'rol', 'cliente')
+FROM auth.users
+WHERE id NOT IN (SELECT id FROM public.usuarios_perfiles)
+ON CONFLICT (id) DO NOTHING;
+```
+
+**NOTA:** Si sigues teniendo el error "Database error saving new user", ejecuta el archivo completo `docs/sql-fix-trigger-perfil.sql` que contiene todos los pasos necesarios.
 
 ### 2. Datos de Ejemplo
 ```sql

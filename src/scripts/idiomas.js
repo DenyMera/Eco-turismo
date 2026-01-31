@@ -1,8 +1,7 @@
 /**
  * 🌐 SISTEMA DE IDIOMAS GLOBAL
  * Maneja la traducción entre Español e Inglés en toda la aplicación
- * 
- * @author Sistema Rutas Eco-Comunitarias
+ * * @author Sistema Rutas Eco-Comunitarias
  * @version 1.0.0
  */
 
@@ -68,12 +67,12 @@ const traducciones = {
     'rutas.tipo.ciclismo': 'Ciclismo',
     'rutas.tipo.observacion': 'Observación',
     'rutas.tipo.fotografia': 'Fotografía',
-    'rutas.duracion.corta': 'Corta',
-    'rutas.duracion.media': 'Media',
-    'rutas.duracion.larga': 'Larga',
-    'rutas.distancia.corta': 'Corta',
-    'rutas.distancia.media': 'Media',
-    'rutas.distancia.larga': 'Larga',
+    'rutas.duracion.corta': 'Short',
+    'rutas.duracion.media': 'Medium',
+    'rutas.duracion.larga': 'Long',
+    'rutas.distancia.corta': 'Short',
+    'rutas.distancia.media': 'Medium',
+    'rutas.distancia.larga': 'Long',
     
     // Modal de ruta
     'modal.titulo': 'Vista Previa de Ruta',
@@ -113,7 +112,7 @@ const traducciones = {
     'ayuda.rutas.titulo': 'Guía de Rutas',
     'ayuda.filtros.titulo': 'Guía de Filtros',
     'ayuda.accesibilidad.titulo': 'Funciones de Accesibilidad',
-    'ayuda.contacto.titulo': 'Contacto y Soporte',
+    'ayuda.tabs.contacto': 'Contacto',
     
     // Accesibilidad
     'accesibilidad.titulo': 'Configuración de Accesibilidad',
@@ -244,7 +243,7 @@ const traducciones = {
     'rutas.distancia.media': 'Medium',
     'rutas.distancia.larga': 'Long',
     
-    // Route modal
+    // Modal de ruta
     'modal.titulo': 'Route Preview',
     'modal.cerrar': 'Close',
     'modal.mapa': 'Interactive Map',
@@ -282,9 +281,9 @@ const traducciones = {
     'ayuda.rutas.titulo': 'Routes Guide',
     'ayuda.filtros.titulo': 'Filters Guide',
     'ayuda.accesibilidad.titulo': 'Accessibility Features',
-    'ayuda.contacto.titulo': 'Contact and Support',
+    'ayuda.tabs.contacto': 'Contact',
     
-    // Accessibility
+    // Accesibilidad
     'accesibilidad.titulo': 'Accessibility Settings',
     'accesibilidad.modo-oscuro': 'Dark Mode',
     'accesibilidad.modo-oscuro.desc': 'Reduces eye strain in low-light environments',
@@ -297,7 +296,7 @@ const traducciones = {
     'accesibilidad.lectura-voz': 'Voice Reading',
     'accesibilidad.lectura-voz.desc': 'Optimized for screen readers',
     
-    // States and messages
+    // Estados y mensajes
     'estado.cargando': 'Loading...',
     'estado.error': 'Error',
     'estado.sin-resultados': 'No results found',
@@ -310,7 +309,7 @@ const traducciones = {
     'footer.soporte': 'Support / Contact',
     'footer.terminos': 'Terms and use',
     
-    // FAQ Help
+    // FAQ Ayuda
     'ayuda.faq.pregunta1': 'What is Eco-Community Routes?',
     'ayuda.faq.respuesta1': 'It is a platform that connects nature lovers with sustainable eco-tourism routes. We promote responsible tourism that benefits local communities and protects the environment.',
     'ayuda.faq.pregunta2': 'How does the rating system work?',
@@ -320,7 +319,7 @@ const traducciones = {
     'ayuda.faq.pregunta4': 'How can I contribute with new routes?',
     'ayuda.faq.respuesta4': 'If you are a local guide or know eco-tourism routes, you can contact us to add new routes. Our team will review them and publish them on the platform.',
     
-    // Dynamic database content
+    // Contenido dinámico de base de datos
     'db.rutas.cargando': 'Loading routes from database...',
     'db.rutas.error': 'Error loading routes. Please try again.',
     'db.rutas.sin-resultados': 'No routes found',
@@ -357,7 +356,7 @@ export function inicializarIdiomas() {
   // Configurar botón de idioma
   const botonIdioma = document.getElementById('boton-idioma');
   if (botonIdioma) {
-    actualizarBotonIdioma();
+    actualizarBotonIdioma(botonIdioma);
     botonIdioma.addEventListener('click', cambiarIdioma);
   }
 
@@ -372,8 +371,10 @@ function cambiarIdioma() {
   idiomaActual = idiomaActual === 'es' ? 'en' : 'es';
   localStorage.setItem('idioma', idiomaActual);
   
+  const botonIdioma = document.getElementById('boton-idioma');
+  
   // Actualizar botón
-  actualizarBotonIdioma();
+  if (botonIdioma) actualizarBotonIdioma(botonIdioma);
   
   // Aplicar traducciones
   aplicarTraducciones();
@@ -388,13 +389,10 @@ function cambiarIdioma() {
 /**
  * 🔄 Actualiza el botón de idioma
  */
-function actualizarBotonIdioma() {
-  const botonIdioma = document.getElementById('boton-idioma');
-  if (botonIdioma) {
-    const icono = idiomaActual === 'es' ? '🇪🇸' : '🇺🇸';
-    const texto = idiomaActual === 'es' ? 'ES' : 'EN';
-    botonIdioma.innerHTML = `${icono} ${texto}`;
-  }
+function actualizarBotonIdioma(botonIdioma) {
+  const icono = idiomaActual === 'es' ? '🇪🇸' : '🇺🇸';
+  const texto = idiomaActual === 'es' ? 'ES' : 'EN';
+  botonIdioma.innerHTML = `${icono} ${texto}`;
 }
 
 /**
@@ -404,28 +402,21 @@ function aplicarTraducciones() {
   // Obtener todos los elementos con atributo data-i18n
   const elementos = document.querySelectorAll('[data-i18n]');
   
-  elementos.forEach(elemento => {
+  elementos.forEach((elemento) => {
     const clave = elemento.getAttribute('data-i18n');
+    if (!clave) return;
+
     const traduccion = obtenerTraduccion(clave);
     
-    if (traduccion) {
-      if (elemento.tagName === 'INPUT' && (elemento.type === 'text' || elemento.type === 'search')) {
+    if (traduccion !== clave) {
+      if (elemento instanceof HTMLInputElement && (elemento.type === 'text' || elemento.type === 'search')) {
         elemento.placeholder = traduccion;
-      } else if (elemento.tagName === 'BUTTON' && elemento.type === 'button') {
-        // Para botones, mantener el texto original si no hay traducción específica
-        if (traduccion !== clave) {
-          elemento.textContent = traduccion;
-        }
+      } else if (elemento instanceof HTMLButtonElement) {
+         // Los botones ya no se traducen aquí, la función actualizarTextoBoton lo maneja si es necesario
       } else if (elemento.tagName === 'OPTION') {
-        // Para opciones de select, mantener el texto original si no hay traducción específica
-        if (traduccion !== clave) {
-          elemento.textContent = traduccion;
-        }
+        elemento.textContent = traduccion;
       } else {
-        // Para otros elementos, aplicar traducción si existe
-        if (traduccion !== clave) {
-          elemento.textContent = traduccion;
-        }
+        elemento.textContent = traduccion;
       }
     }
   });
@@ -459,7 +450,7 @@ export function traducirTextoDinamico(clave, texto = '') {
 
 /**
  * 🔄 Actualiza traducciones en elementos dinámicos
- * @param {HTMLElement} elemento - Elemento a actualizar
+ * @param {HTMLElement | null} elemento - Elemento a actualizar
  * @param {string} clave - Clave de la traducción
  */
 export function actualizarTraduccionDinamica(elemento, clave) {
@@ -491,6 +482,32 @@ export function inicializarAccesibilidad() {
   const botonAccesibilidad = document.getElementById('abrir-accesibilidad');
   const modalAccesibilidad = document.getElementById('modal-accesibilidad');
   
+  // Lógica original para inicializar el botón flotante (sin la lógica selectiva)
+  // --- LÓGICA: CREAR BOTÓN FLOTANTE ---
+  const botonFlotante = document.createElement('button');
+  botonFlotante.id = 'boton-flotante-accesibilidad';
+  botonFlotante.className = 'boton-flotante';
+  
+  botonFlotante.setAttribute('aria-label', obtenerTraduccion('nav.accesibilidad'));
+  
+  // 1. Insertar el icono
+  botonFlotante.innerHTML = `
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+      <circle cx="12" cy="5.5" r="2.5"></circle>
+      <path d="M15.5 21.5V16c0-1.7-1.3-3-3-3s-3 1.3-3 3v5.5"></path>
+      <path d="M15.5 11.5c1.4 1.4 1.4 3.6 0 5"></path>
+      <path d="M8.5 11.5c-1.4 1.4-1.4 3.6 0 5"></path>
+    </svg>`;
+    
+  // 2. Añadir el listener para abrir el modal
+  if (modalAccesibilidad) {
+    botonFlotante.addEventListener('click', abrirModalAccesibilidad);
+  }
+  
+  // 3. Montar el botón al cuerpo del documento
+  document.body.appendChild(botonFlotante);
+  // ------------------------------------
+
   if (botonAccesibilidad && modalAccesibilidad) {
     botonAccesibilidad.addEventListener('click', () => {
       abrirModalAccesibilidad();
@@ -552,7 +569,6 @@ function configurarControlesAccesibilidad() {
   });
   
   // Controles de accesibilidad
-  configurarModoOscuro();
   configurarAltoContraste();
   configurarTextoAmpliado();
   configurarAlertas();
@@ -560,27 +576,24 @@ function configurarControlesAccesibilidad() {
 }
 
 /**
- * 🌙 Configura el modo oscuro
- */
-function configurarModoOscuro() {
-  const boton = document.getElementById('toggle-modo-oscuro');
-  if (boton) {
-    boton.addEventListener('click', () => {
-      // Alternar modo oscuro usando la función existente
-      const botonTema = document.getElementById('boton-accesibilidad');
-      if (botonTema) {
-        botonTema.click();
-      }
-      actualizarTextoBoton(boton, 'Modo Oscuro', 'Modo Claro');
-    });
-  }
-}
-
-/**
  * ⚡ Configura el alto contraste
  */
 function configurarAltoContraste() {
   const boton = document.getElementById('toggle-alto-contraste');
+  const botonAccesibilidad = document.getElementById('boton-accesibilidad');
+  
+  // Aplicar estado guardado al cargar
+  const contrasteGuardado = localStorage.getItem('contrasteAlto') === 'true';
+  if (contrasteGuardado) {
+    document.documentElement.setAttribute('data-contraste', 'alto');
+    if (boton) {
+      boton.textContent = obtenerTraduccion('accesibilidad.alto-contraste') + ' (Activo)';
+    }
+    if (botonAccesibilidad) {
+      botonAccesibilidad.textContent = obtenerTraduccion('btn.modo-claro');
+    }
+  }
+  
   if (boton) {
     boton.addEventListener('click', () => {
       const activo = document.documentElement.hasAttribute('data-contraste');
@@ -588,11 +601,17 @@ function configurarAltoContraste() {
       if (activo) {
         document.documentElement.removeAttribute('data-contraste');
         localStorage.removeItem('contrasteAlto');
-        actualizarTextoBoton(boton, 'Activar Alto Contraste', 'Desactivar Alto Contraste');
+        actualizarTextoBoton(boton, obtenerTraduccion('accesibilidad.alto-contraste'), obtenerTraduccion('accesibilidad.alto-contraste') + ' (Activo)');
+        if (botonAccesibilidad) {
+          botonAccesibilidad.textContent = obtenerTraduccion('btn.modo-oscuro');
+        }
       } else {
         document.documentElement.setAttribute('data-contraste', 'alto');
         localStorage.setItem('contrasteAlto', 'true');
-        actualizarTextoBoton(boton, 'Desactivar Alto Contraste', 'Activar Alto Contraste');
+        actualizarTextoBoton(boton, obtenerTraduccion('accesibilidad.alto-contraste') + ' (Activo)', obtenerTraduccion('accesibilidad.alto-contraste'));
+        if (botonAccesibilidad) {
+          botonAccesibilidad.textContent = obtenerTraduccion('btn.modo-claro');
+        }
       }
     });
   }
@@ -624,7 +643,11 @@ function configurarTextoAmpliado() {
     });
   }
   
-  // Aplicar tamaño guardado al cargar
+  // Aplicar tamaño guardado al cargar (si existe en localStorage)
+  const tamañoGuardado = localStorage.getItem('tamañoTexto');
+  if (tamañoGuardado) {
+    tamañoActual = parseInt(tamañoGuardado);
+  }
   aplicarTamañoTexto(tamañoActual);
   if (indicador) indicador.textContent = `${tamañoActual}%`;
 }
@@ -642,6 +665,16 @@ function aplicarTamañoTexto(tamaño) {
  */
 function configurarAlertas() {
   const boton = document.getElementById('toggle-alertas');
+  
+  // Aplicar estado guardado al cargar
+  const alertasGuardadas = localStorage.getItem('alertasActivas') === 'true';
+  if (alertasGuardadas) {
+    document.documentElement.setAttribute('data-alertas', 'activas');
+    if (boton) {
+      boton.textContent = obtenerTraduccion('accesibilidad.alertas') + ' (Activo)';
+    }
+  }
+  
   if (boton) {
     boton.addEventListener('click', () => {
       const activo = document.documentElement.hasAttribute('data-alertas');
@@ -649,21 +682,31 @@ function configurarAlertas() {
       if (activo) {
         document.documentElement.removeAttribute('data-alertas');
         localStorage.removeItem('alertasActivas');
-        actualizarTextoBoton(boton, 'Activar Alertas', 'Desactivar Alertas');
+        actualizarTextoBoton(boton, obtenerTraduccion('accesibilidad.alertas'), obtenerTraduccion('accesibilidad.alertas') + ' (Activo)');
       } else {
         document.documentElement.setAttribute('data-alertas', 'activas');
         localStorage.setItem('alertasActivas', 'true');
-        actualizarTextoBoton(boton, 'Desactivar Alertas', 'Activar Alertas');
+        actualizarTextoBoton(boton, obtenerTraduccion('accesibilidad.alertas') + ' (Activo)', obtenerTraduccion('accesibilidad.alertas'));
       }
     });
   }
 }
 
 /**
- * 🔊 Configura la lectura por voz
+ * 🔊 Configura la lectura por voz (Solo optimización)
  */
 function configurarLecturaVoz() {
   const boton = document.getElementById('toggle-lectura-voz');
+  
+  // Aplicar estado guardado al cargar
+  const lecturaGuardada = localStorage.getItem('lecturaVoz') === 'true';
+  if (lecturaGuardada) {
+    document.documentElement.setAttribute('data-lectura-voz', 'activa');
+    if (boton) {
+      boton.textContent = obtenerTraduccion('accesibilidad.lectura-voz') + ' (Activo)';
+    }
+  }
+  
   if (boton) {
     boton.addEventListener('click', () => {
       const activo = document.documentElement.hasAttribute('data-lectura-voz');
@@ -671,22 +714,30 @@ function configurarLecturaVoz() {
       if (activo) {
         document.documentElement.removeAttribute('data-lectura-voz');
         localStorage.removeItem('lecturaVoz');
-        actualizarTextoBoton(boton, 'Activar Lectura', 'Desactivar Lectura');
+        actualizarTextoBoton(boton, obtenerTraduccion('accesibilidad.lectura-voz'), obtenerTraduccion('accesibilidad.lectura-voz') + ' (Activo)');
       } else {
         document.documentElement.setAttribute('data-lectura-voz', 'activa');
         localStorage.setItem('lecturaVoz', 'true');
-        actualizarTextoBoton(boton, 'Desactivar Lectura', 'Activar Lectura');
+        actualizarTextoBoton(boton, obtenerTraduccion('accesibilidad.lectura-voz') + ' (Activo)', obtenerTraduccion('accesibilidad.lectura-voz'));
       }
     });
   }
 }
 
 /**
- * 🔄 Actualiza el texto de un botón
+ * 🔄 Actualiza el texto de un botón (Añadiendo soporte para activo/inactivo con traducción)
  */
 function actualizarTextoBoton(boton, textoActivo, textoInactivo) {
-  const activo = boton.textContent.includes(textoActivo);
-  boton.textContent = activo ? textoInactivo : textoActivo;
+  // Simplemente alterna el contenido de texto.
+  const isActivo = boton.textContent?.includes('(Activo)') || false;
+
+  if (isActivo) {
+    // Si está activo, lo pasa a inactivo (quitando '(Activo)')
+    boton.textContent = textoInactivo.replace(' (Activo)', '').trim();
+  } else {
+    // Si está inactivo, lo pasa a activo (añadiendo '(Activo)')
+    boton.textContent = textoActivo + ' (Activo)';
+  }
 }
 
 // Aplicar configuraciones guardadas al cargar

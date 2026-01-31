@@ -6,11 +6,27 @@
   <title>Mi Perfil — Rutas Eco-Comunitarias</title>
   <link rel="stylesheet" href="/src/styles.css">
   
+  <!-- Script anti-flash: aplica tema y accesibilidad inmediatamente -->
   <script>
     (function() {
+      // Aplicar contraste alto
       const contrasteGuardado = localStorage.getItem('contrasteAlto');
       if (contrasteGuardado === 'true') {
         document.documentElement.setAttribute('data-contraste', 'alto');
+      }
+      
+      // Aplicar tamaño de texto guardado
+      const tamañoTexto = localStorage.getItem('tamañoTexto');
+      if (tamañoTexto) {
+        document.documentElement.style.fontSize = tamañoTexto + '%';
+      }
+      
+      // Aplicar otras configuraciones de accesibilidad
+      if (localStorage.getItem('alertasActivas') === 'true') {
+        document.documentElement.setAttribute('data-alertas', 'activas');
+      }
+      if (localStorage.getItem('lecturaVoz') === 'true') {
+        document.documentElement.setAttribute('data-lectura-voz', 'activa');
       }
     })();
   </script>
@@ -18,25 +34,56 @@
 
 <body>
   <header class="cabecera">
-    <div class="cabecera__izq">
-      <img src="/src/logo-placeholder.svg" alt="Logo Plataforma" class="logo">
-      <h1 class="nombre-sistema">Rutas Eco-Comunitarias</h1>
-    </div>
+    <div class="cabecera__contenido">
+  
+      <div class="cabecera__izq">
+        <img src="/src/logo-placeholder.svg" alt="Logo Plataforma" class="logo">
+        <h1 class="nombre-sistema">Rutas Eco-Comunitarias</h1>
+      </div>
+  
+      <div class="menu-colapsable" id="menu-colapsable">
+        <nav class="menu-horizontal" aria-label="Menú principal">
+          <ul id="menuItems" class="menu__lista--horizontal">
+            
+            <li><a href="/index.html" class="menu__item">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+              <span data-i18n="nav.inicio">Inicio</span>
+            </a></li>
+            
+            <li><a href="/pages/rutas.html" class="menu__item">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+              <span data-i18n="nav.rutas">Rutas</span>
+            </a></li>
+            
+            <li><a href="/pages/novedades.html" class="menu__item">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+              <span data-i18n="nav.novedades">Novedades</span>
+            </a></li>
+            
+            <li><a href="/pages/ayuda.html" class="menu__item">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+              <span data-i18n="nav.ayuda">Ayuda</span>
+            </a></li>
 
-    <nav class="menu-horizontal" aria-label="Menú principal">
-      <ul id="menuItems" class="menu__lista--horizontal">
-        <li><a href="/index.html" class="menu__item" data-i18n="nav.inicio">Inicio</a></li>
-        <li><a href="/pages/rutas.html" class="menu__item" data-i18n="nav.rutas">Rutas</a></li>
-        <li><a href="/pages/novedades.html" class="menu__item" data-i18n="nav.novedades">Novedades</a></li>
-        <li><a href="/pages/ayuda.html" class="menu__item" data-i18n="nav.ayuda">Ayuda</a></li>
-        <li><a href="#" class="menu__item" id="abrir-accesibilidad" data-i18n="nav.accesibilidad">Accesibilidad</a></li>
-      </ul>
-    </nav>
-
-    <div class="cabecera__der">
-      <button class="boton" id="boton-idioma">🌐 ES</button>
-      <button class="boton secundario" id="boton-logout">Cerrar Sesión</button>
-      <button id="boton-accesibilidad" class="boton" data-i18n="btn.modo-oscuro">Modo oscuro</button>
+          </ul>
+        </nav>
+  
+        <div class="cabecera__der">
+          <button class="boton" id="boton-idioma">🌐 ES</button>
+          <a href="/pages/registro.html" class="boton">Registrarse</a>
+          <a href="/pages/login.html" class="boton" data-i18n="btn.iniciar-sesion">Iniciar Sesion</a>
+          <button id="boton-accesibilidad" class="boton" data-i18n="btn.modo-oscuro">Modo oscuro</button>
+        </div>
+      </div>
+      
+      <button class="menu-toggle" id="menuToggle" aria-label="Abrir menú" aria-expanded="false">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="3" y1="12" x2="21" y2="12"></line>
+          <line x1="3" y1="6" x2="21" y2="6"></line>
+          <line x1="3" y1="18" x2="21" y2="18"></line>
+        </svg>
+      </button>
+  
     </div>
   </header>
 
@@ -47,194 +94,469 @@
       <div id="auth-error" class="auth-error" style="display: none;"></div>
       <div id="auth-success" class="auth-success" style="display: none;"></div>
 
-      <section class="perfil-seccion">
-        <h3>Datos Personales</h3>
-        <form id="form-perfil" class="auth-form">
-          <div class="formulario-grupo">
-            <label for="email">Email</label>
-            <input type="email" id="email" name="email" disabled>
-            <small>El email no se puede cambiar.</small>
-          </div>
-          
-          <div class="formulario-grupo">
-            <label for="nombre">Nombre</label>
-            <input type="text" id="nombre" name="nombre" required autocomplete="given-name">
-          </div>
+      <div class="perfil-nav-botones">
+        <button id="btn-mostrar-rutas" class="boton primario">Mis Rutas</button>
+        <button id="btn-mostrar-perfil" class="boton secundario">Ver/Editar Perfil</button>
+      </div>
 
-          <div class="formulario-grupo">
-            <label for="apellido">Apellido</label>
-            <input type="text" id="apellido" name="apellido" required autocomplete="family-name">
+      <section class="perfil-seccion perfil-contenido" id="mis-rutas-seccion">
+        <h3>Mis Rutas Guardadas</h3>
+        <div id="lista-mis-rutas" class="lista-rutas">
+          <div class="cargando">
+            <div class="cargando-spinner"></div>
+            <p>Cargando mis rutas...</p>
           </div>
-
-          <div class="formulario-grupo">
-            <label for="telefono">Teléfono (Opcional)</label>
-            <input type="tel" id="telefono" name="telefono" autocomplete="tel">
-          </div>
-          
-          <button type-"submit" class="boton primario">Guardar Cambios</button>
-        </form>
+        </div>
+        <div id="sin-rutas" class="sin-resultados" style="display: none;">
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>
+          </svg>
+          <h3>No tienes rutas guardadas</h3>
+          <p>Explora las <a href="/pages/rutas.html">rutas disponibles</a> y guarda tus favoritas.</p>
+        </div>
       </section>
 
-      <section class="perfil-seccion">
-        <h3>Cambiar Contraseña</h3>
-        <form id="form-password" class="auth-form">
-          <div class="formulario-grupo">
-            <label for="new_password">Nueva Contraseña</label>
-            <input type="password" id="new_password" name="new_password" required autocomplete="new-password" minlength="6" placeholder="contraseña">
+      <div class="perfil-contenido" id="editar-perfil-seccion">
+        <section class="perfil-seccion">
+          <h3>Ver/Editar Datos Personales</h3>
+          <form id="form-perfil" class="auth-form">
+            <div class="formulario-grupo">
+              <label for="email">Email</label>
+              <input type="email" id="email" name="email" disabled>
+              <small>El email no se puede cambiar.</small>
+            </div>
+            
+            <div class="formulario-grupo">
+              <label for="nombre">Nombre</label>
+              <input type="text" id="nombre" name="nombre" required autocomplete="given-name">
+            </div>
+
+            <div class="formulario-grupo">
+              <label for="apellido">Apellido</label>
+              <input type="text" id="apellido" name="apellido" required autocomplete="family-name">
+            </div>
+
+            <div class="formulario-grupo">
+              <label for="telefono">Teléfono (Opcional)</label>
+              <input type="tel" id="telefono" name="telefono" autocomplete="tel">
+            </div>
+            
+            <button type="submit" class="boton primario">Guardar Cambios</button>
+          </form>
+        </section>
+
+        <section class="perfil-seccion">
+          <h3>Cambiar Contraseña</h3>
+          <form id="form-password" class="auth-form">
+            <div class="formulario-grupo">
+              <label for="new_password">Nueva Contraseña</label>
+              <input type="password" id="new_password" name="new_password" required autocomplete="new-password" minlength="6" placeholder="contraseña">
+            </div>
+            <button type="submit" class="boton secundario">Actualizar Contraseña</button>
+          </form>
+        </section>
+
+        <section class="perfil-seccion perfil-seccion--plan">
+          <h3>Mi Plan</h3>
+          <div class="plan-container">
+            <div id="plan-actual" class="plan-info">
+              <div class="plan-cargando">
+                <div class="cargando-spinner"></div>
+                <p>Cargando plan...</p>
+              </div>
+            </div>
+            <div class="plan-opciones">
+              <button id="btn-plan-basico" class="boton boton-plan boton-plan--basico">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
+                  <path d="M2 17l10 5 10-5"></path>
+                  <path d="M2 12l10 5 10-5"></path>
+                </svg>
+                <span>Plan Básico</span>
+              </button>
+              <button id="btn-plan-pro" class="boton boton-plan boton-plan--pro">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
+                </svg>
+                <span>Actualizar a Plan Pro</span>
+              </button>
+            </div>
+            <div class="plan-beneficios">
+              <div class="plan-beneficio">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+                <span>Acceso a todas las rutas básicas</span>
+              </div>
+              <div class="plan-beneficio plan-beneficio--pro">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+                <span>Rutas exclusivas Pro</span>
+              </div>
+              <div class="plan-beneficio plan-beneficio--pro">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+                <span>Funciones avanzadas</span>
+              </div>
+            </div>
           </div>
-          <button type="submit" class="boton secundario">Actualizar Contraseña</button>
-        </form>
-      </section>
+        </section>
+      </div>
       
     </div>
   </main>
 
-  <footer class="pie">
-    <small>© <span id="ano"></span> <span data-i18n="footer.derechos">Rutas Eco-Comunitarias</span></small>
+  <footer class="pie-profesional">
+    <div class="pie-contenido">
+      
+      <div class="pie-columna pie-columna--brand">
+        <img src="/src/logo-placeholder.svg" alt="Logo Plataforma" class="logo">
+        <h3 class="nombre-sistema">Rutas Eco-Comunitarias</h3>
+        <p>Conectando la naturaleza con la comunidad de forma sostenible.</p>
+      </div>
+      
+      <div class="pie-columna">
+        <h4>Navegación</h4>
+        <ul>
+          <li><a href="/index.html" class="pie-link" data-i18n="nav.inicio">Inicio</a></li>
+          <li><a href="/pages/rutas.html" class="pie-link" data-i18n="nav.rutas">Rutas</a></li>
+          <li><a href="/pages/novedades.html" class="pie-link" data-i18n="nav.novedades">Novedades</a></li>
+        </ul>
+      </div>
+      
+      <div class="pie-columna">
+        <h4>Soporte</h4>
+        <ul>
+          <li><a href="/pages/ayuda.html" class="pie-link" id="link-soporte" data-i18n="footer.soporte">Ayuda / Contacto</a></li>
+          <li><a href="/pages/terminos.html" class="pie-link" target="_blank" rel="noopener noreferrer">Términos y Privacidad</a></li>
+          <li><a href="/pages/ayuda.html#tab-accesibilidad" class="pie-link">Accesibilidad</a></li>
+        </ul>
+      </div>
+      
+      <div class="pie-columna">
+        <h4>Síguenos</h4>
+        <div class="pie-sociales">
+          <a href="#" class="pie-social-link" aria-label="Facebook">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>
+          </a>
+          <a href="#" class="pie-social-link" aria-label="Instagram">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.07 1.646.07 4.85s-.012 3.584-.07 4.85c-.148 3.227-1.664 4.771-4.919 4.919-1.266.058-1.646.07-4.85.07s-3.584-.012-4.85-.07c-3.252-.148-4.771-1.691-4.919-4.919-.058-1.265-.07-1.646-.07-4.85s.012-3.584.07-4.85c.148-3.227 1.664 4.771 4.919-4.919C8.416 2.175 8.796 2.163 12 2.163zm0 1.62c-3.14 0-3.486.01-4.708.066-2.678.122-3.83 1.274-3.952 3.952C3.27 8.92 3.26 9.266 3.26 12s.01 3.08.066 4.708c.122 2.678 1.274 3.83 3.952 3.952C8.51 20.73 8.86 20.74 12 20.74s3.08-.01 4.708-.066c2.678-.122 3.83-1.274 3.952-3.952C20.73 15.08 20.74 14.734 20.74 12s-.01-3.08-.066-4.708c-.122-2.678-1.274-3.83-3.952-3.952C15.09 3.27 14.74 3.26 12 3.26zm0 2.92c-2.92 0-5.28 2.36-5.28 5.28s2.36 5.28 5.28 5.28 5.28-2.36 5.28-5.28-2.36-5.28-5.28-5.28zm0 8.52c-1.8 0-3.24-1.44-3.24-3.24s1.44-3.24 3.24-3.24 3.24 1.44 3.24 3.24-1.44 3.24-3.24 3.24zM16.965 6.57c-.7 0-1.275.575-1.275 1.275s.575 1.275 1.275 1.275 1.275-.575 1.275-1.275-.575-1.275-1.275-1.275z"></path></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+    
+    <div class="pie-bottom-bar">
+      <small>© <span id="ano"></span> <span data-i18n="footer.derechos">Rutas Eco-Comunitarias</span>. Todos los derechos reservados.</small>
+    </div>
   </footer>
   
   <div id="modal-accesibilidad" class="modal" role="dialog" aria-labelledby="modal-accesibilidad-titulo" aria-hidden="true">
     </div>
 
-  <script type="module">
-    import { inicializarTema, actualizarAnio, inicializarMenu } from "/src/scripts/comunes.ts";
-    import { inicializarIdiomas, inicializarAccesibilidad } from "/src/scripts/idiomas.js";
-    import { supabase } from "/src/services/supabase.js";
-
-    const errorDiv = document.getElementById('auth-error');
-    const successDiv = document.getElementById('auth-success');
-    let currentUserId = null;
-
-    document.addEventListener("DOMContentLoaded", () => {
-      inicializarTema();
-      actualizarAnio();
-      inicializarMenu();
-      inicializarIdiomas();
-      inicializarAccesibilidad();
+    <script type="module">
+      import { inicializarTema, actualizarAnio, inicializarMenu, inicializarSesionUI, inicializarAtajosTeclado } from "/src/scripts/comunes.ts";
+      import { inicializarIdiomas, inicializarAccesibilidad } from "/src/scripts/idiomas.js";
+      import { supabase, convertirRutaFormato, obtenerRutasFavoritasUsuario, obtenerPlanUsuario, actualizarPlanUsuario } from "/src/services/supabase.js";
+  
+      const errorDiv = document.getElementById('auth-error');
+      const successDiv = document.getElementById('auth-success');
+      let currentUserId = null;
+  
+      // Selectores para navegación de perfil
+      const btnMostrarRutas = document.getElementById('btn-mostrar-rutas');
+      const btnMostrarPerfil = document.getElementById('btn-mostrar-perfil');
       
-      cargarPerfil();
-      
-      document.getElementById('form-perfil').addEventListener('submit', handleUpdatePerfil);
-      document.getElementById('form-password').addEventListener('submit', handleUpdatePassword);
-      document.getElementById('boton-logout').addEventListener('click', handleLogout);
-    });
-
-    async function cargarPerfil() {
-      try {
-        const { data: { user }, error: authError } = await supabase.auth.getUser();
-
-        if (authError || !user) {
-          throw new Error('No estás autenticado.');
-        }
+      const seccionRutas = document.getElementById('mis-rutas-seccion');
+      const seccionPerfil = document.getElementById('editar-perfil-seccion');
+  
+      document.addEventListener("DOMContentLoaded", () => {
+        inicializarTema();
+        actualizarAnio();
+        inicializarMenu();
+        inicializarIdiomas();
+        inicializarAccesibilidad();
+        inicializarSesionUI();
+        inicializarAtajosTeclado();
         
-        currentUserId = user.id; // Guardar el ID del usuario
-        document.getElementById('email').value = user.email;
-
-        // Cargar datos desde la tabla 'usuarios_perfiles'
-        const { data: profile, error: profileError } = await supabase
-          .from('usuarios_perfiles')
-          .select('nombre, apellido, telefono')
-          .eq('id', user.id)
-          .single(); // Esperamos un solo resultado
-
-        if (profileError) {
-          // Manejar el caso donde el perfil aún no existe (aunque el registro ya deberia crearlo)
-          if (profileError.code === 'PGRST116') {
-             console.warn('El perfil de usuario no existe en la tabla pública, pero el usuario está autenticado.');
-             // El usuario puede llenar los campos y se crearán al guardar.
-          } else {
-            throw profileError;
-          }
-        }
-
-        // Rellenar campos si el perfil existe
-        if (profile) {
-          document.getElementById('nombre').value = profile.nombre || '';
-          document.getElementById('apellido').value = profile.apellido || '';
-          document.getElementById('telefono').value = profile.telefono || '';
-        }
-
-      } catch (error) {
-        // Si no hay usuario, redirigir a login
-        console.warn(error.message);
-        window.location.href = '/pages/login.html';
-      }
-    }
-
-    async function handleUpdatePerfil(e) {
-      e.preventDefault();
-      mostrarMensaje('', 'success'); // Limpiar mensajes
-
-      if (!currentUserId) {
-        mostrarMensaje('Error: No se pudo identificar al usuario.', 'error');
-        return;
-      }
-
-      const nombre = document.getElementById('nombre').value;
-      const apellido = document.getElementById('apellido').value;
-      const telefono = document.getElementById('telefono').value;
-      
-      try {
-        // Actualizar la tabla 'usuarios_perfiles'
-        const { error } = await supabase
-          .from('usuarios_perfiles')
-          .update({
-            nombre: nombre,
-            apellido: apellido,
-            telefono: telefono
-          })
-          .eq('id', currentUserId); // Asegura que solo actualice su propio perfil
-
-        if (error) throw error;
+        cargarPerfil();
+        cargarMisRutas();
+        cargarPlanUsuario();
         
-        mostrarMensaje('¡Perfil actualizado con éxito!', 'success');
-      } catch (error) {
-        mostrarMensaje('Error: ' + error.message, 'error');
-      }
-    }
-
-    async function handleUpdatePassword(e) {
-      e.preventDefault();
-      mostrarMensaje('', 'success'); // Limpiar mensajes
-      
-      const new_password = document.getElementById('new_password').value;
-
-      try {
-        const { data, error } = await supabase.auth.updateUser({
-          password: new_password
+        document.getElementById('form-perfil').addEventListener('submit', handleUpdatePerfil);
+        document.getElementById('form-password').addEventListener('submit', handleUpdatePassword);
+        document.getElementById('btn-plan-basico').addEventListener('click', () => cambiarPlan('basico'));
+        document.getElementById('btn-plan-pro').addEventListener('click', () => cambiarPlan('pro'));
+        
+  
+        // Lógica para los botones de navegación
+        btnMostrarRutas.addEventListener('click', () => {
+            mostrarSeccion(seccionRutas, btnMostrarRutas);
+            ocultarSeccion(seccionPerfil, btnMostrarPerfil);
         });
-
-        if (error) throw error;
-
-        mostrarMensaje('¡Contraseña actualizada con éxito!', 'success');
-        e.target.reset(); // Limpiar campo de contraseña
-      } catch (error) {
-        mostrarMensaje('Error: ' + error.message, 'error');
+  
+        btnMostrarPerfil.addEventListener('click', () => {
+            mostrarSeccion(seccionPerfil, btnMostrarPerfil);
+            ocultarSeccion(seccionRutas, btnMostrarRutas);
+        });
+  
+        // Estado inicial (Mostrar "Mis Rutas" por defecto)
+        mostrarSeccion(seccionRutas, btnMostrarRutas);
+        ocultarSeccion(seccionPerfil, btnMostrarPerfil);
+      });
+  
+      // Funciones helper para mostrar/ocultar
+      function mostrarSeccion(seccion, boton) {
+        seccion.style.display = 'block';
+        boton.classList.add('primario');
+        boton.classList.remove('secundario');
       }
-    }
+  
+      function ocultarSeccion(seccion, boton) {
+        seccion.style.display = 'none';
+        boton.classList.add('secundario');
+        boton.classList.remove('primario');
+      }
+  
+      /**
+       * Carga los datos del perfil del usuario (datos personales)
+       */
+      async function cargarPerfil() {
+        try {
+          const { data: { user }, error: authError } = await supabase.auth.getUser();
+  
+          if (authError || !user) {
+            throw new Error('No estás autenticado.');
+          }
+          
+          currentUserId = user.id; 
+          document.getElementById('email').value = user.email;
+  
+          const { data: profile, error: profileError } = await supabase
+            .from('usuarios_perfiles')
+            .select('nombre, apellido, telefono')
+            .eq('id', user.id)
+            .single(); 
+  
+          if (profileError) {
+            if (profileError.code === 'PGRST116') {
+               console.warn('El perfil de usuario no existe en la tabla pública.');
+            } else {
+              throw profileError;
+            }
+          }
+  
+          if (profile) {
+            document.getElementById('nombre').value = profile.nombre || '';
+            document.getElementById('apellido').value = profile.apellido || '';
+            document.getElementById('telefono').value = profile.telefono || '';
+          }
+  
+        } catch (error) {
+          console.warn(error.message);
+          window.location.href = '/pages/login.html';
+        }
+      }
+  
+      /**
+       * Carga las rutas guardadas por el usuario desde Supabase
+       */
+      async function cargarMisRutas() {
+        const lista = document.getElementById('lista-mis-rutas');
+        const sinRutasMsg = document.getElementById('sin-rutas');
+        
+        try {
+          const { data: rutas, error } = await obtenerRutasFavoritasUsuario();
 
-    async function handleLogout() {
-      try {
-        const { error } = await supabase.auth.signOut();
-        if (error) throw error;
-        // Redirigir al inicio
-        window.location.href = '/index.html';
-      } catch (error) {
-        mostrarMensaje('Error: ' + error.message, 'error');
+          if (error) {
+            console.error('Error al cargar rutas favoritas:', error);
+            lista.innerHTML = `<p>Error al cargar tus rutas guardadas.</p>`;
+            sinRutasMsg.style.display = 'none';
+            return;
+          }
+
+          const misRutas = rutas || [];
+
+          if (misRutas.length === 0) {
+            lista.style.display = 'none';
+            sinRutasMsg.style.display = 'flex';
+          } else {
+            lista.style.display = 'grid';
+            sinRutasMsg.style.display = 'none';
+            
+            lista.innerHTML = misRutas.map(ruta => `
+              <div class="tarjeta-ruta" data-ruta-id="${ruta.id}">
+                <div class="tarjeta-ruta__imagen">
+                  <img src="${ruta.imagen}" alt="${ruta.nombre}" loading="lazy">
+                </div>
+                <div class="tarjeta-ruta__contenido">
+                  <h3 class="tarjeta-ruta__titulo">${ruta.nombre}</h3>
+                  <div class="tarjeta-ruta__meta">
+                    <div class="meta-item">
+                      <span>${ruta.ubicacion}</span>
+                    </div>
+                    <div class="meta-item">
+                      <span>${ruta.distancia}</span>
+                    </div>
+                  </div>
+                  <div class="tarjeta-ruta__acciones">
+                    <button class="boton primario boton--iniciar" data-ruta-id="${ruta.id}">
+                      Iniciar
+                    </button>
+                  </div>
+                </div>
+              </div>
+            `).join('');
+          }
+  
+        } catch (error) {
+          console.error('Error al cargar mis rutas:', error.message);
+          lista.innerHTML = `<p>Error al cargar tus rutas guardadas: ${error.message}</p>`;
+          sinRutasMsg.style.display = 'none';
+        }
       }
-    }
-    
-    function mostrarMensaje(texto, tipo = 'error') {
-      if (tipo === 'error') {
-        errorDiv.textContent = texto;
-        errorDiv.style.display = texto ? 'block' : 'none';
-        successDiv.style.display = 'none';
-      } else {
-        successDiv.textContent = texto;
-        successDiv.style.display = texto ? 'block' : 'none';
-        errorDiv.style.display = 'none';
+  
+  
+      async function handleUpdatePerfil(e) {
+        e.preventDefault();
+        mostrarMensaje('', 'success'); 
+  
+        if (!currentUserId) {
+          mostrarMensaje('Error: No se pudo identificar al usuario.', 'error');
+          return;
+        }
+  
+        const nombre = document.getElementById('nombre').value;
+        const apellido = document.getElementById('apellido').value;
+        const telefono = document.getElementById('telefono').value;
+        
+        try {
+          const { error } = await supabase
+            .from('usuarios_perfiles')
+            .update({
+              nombre: nombre,
+              apellido: apellido,
+              telefono: telefono
+            })
+            .eq('id', currentUserId); 
+  
+          if (error) throw error;
+          
+          mostrarMensaje('¡Perfil actualizado con éxito!', 'success');
+        } catch (error) {
+          mostrarMensaje('Error: ' + error.message, 'error');
+        }
       }
-    }
-  </script>
+  
+      async function handleUpdatePassword(e) {
+        e.preventDefault();
+        mostrarMensaje('', 'success'); 
+        
+        const new_password = document.getElementById('new_password').value;
+  
+        try {
+          const { data, error } = await supabase.auth.updateUser({
+            password: new_password
+          });
+  
+          if (error) throw error;
+  
+          mostrarMensaje('¡Contraseña actualizada con éxito!', 'success');
+          e.target.reset(); 
+        } catch (error) {
+          mostrarMensaje('Error: ' + error.message, 'error');
+        }
+      }
+  
+      
+      function mostrarMensaje(texto, tipo = 'error') {
+        if (tipo === 'error') {
+          errorDiv.textContent = texto;
+          errorDiv.style.display = texto ? 'block' : 'none';
+          successDiv.style.display = 'none';
+        } else {
+          successDiv.textContent = texto;
+          successDiv.style.display = texto ? 'block' : 'none';
+          errorDiv.style.display = 'none';
+        }
+      }
+
+      /**
+       * Carga el plan actual del usuario
+       */
+      async function cargarPlanUsuario() {
+        const planInfo = document.getElementById('plan-actual');
+        try {
+          const plan = await obtenerPlanUsuario();
+          const esPro = plan === 'pro';
+          planInfo.innerHTML = `
+            <div class="plan-tarjeta ${esPro ? 'plan-tarjeta--pro' : 'plan-tarjeta--basico'}">
+              <div class="plan-tarjeta-header">
+                <div class="plan-icono ${esPro ? 'plan-icono--pro' : ''}">
+                  ${esPro ? `
+                  <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
+                  </svg>
+                  ` : `
+                  <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
+                    <path d="M2 17l10 5 10-5"></path>
+                    <path d="M2 12l10 5 10-5"></path>
+                  </svg>
+                  `}
+                </div>
+                <div class="plan-tarjeta-info">
+                  <h4 class="plan-nombre">Plan ${esPro ? 'Pro' : 'Básico'}</h4>
+                  <p class="plan-descripcion">${esPro ? 'Acceso completo a todas las rutas' : 'Acceso a rutas básicas'}</p>
+                </div>
+                ${esPro ? '<span class="badge badge--pro-plan">PRO</span>' : ''}
+              </div>
+            </div>
+          `;
+          
+          // Actualizar estado de botones
+          if (plan === 'pro') {
+            document.getElementById('btn-plan-pro').classList.remove('primario');
+            document.getElementById('btn-plan-pro').classList.add('secundario');
+            document.getElementById('btn-plan-basico').classList.add('primario');
+            document.getElementById('btn-plan-basico').classList.remove('secundario');
+          } else {
+            document.getElementById('btn-plan-pro').classList.add('primario');
+            document.getElementById('btn-plan-pro').classList.remove('secundario');
+            document.getElementById('btn-plan-basico').classList.remove('primario');
+            document.getElementById('btn-plan-basico').classList.add('secundario');
+          }
+        } catch (error) {
+          console.error('Error al cargar plan:', error);
+          planInfo.innerHTML = '<p style="color: var(--muted);">Error al cargar el plan</p>';
+        }
+      }
+
+      /**
+       * Cambia el plan del usuario
+       */
+      async function cambiarPlan(nuevoPlan) {
+        try {
+          const { data, error } = await actualizarPlanUsuario(nuevoPlan);
+          
+          if (error) {
+            mostrarMensaje('Error al cambiar el plan: ' + error.message, 'error');
+            return;
+          }
+
+          mostrarMensaje(`¡Plan actualizado a ${nuevoPlan === 'pro' ? 'Pro' : 'Básico'}!`, 'success');
+          await cargarPlanUsuario();
+          
+          // Recargar la página después de 1 segundo para actualizar todas las vistas
+          setTimeout(() => {
+            window.location.reload();
+          }, 1000);
+        } catch (error) {
+          mostrarMensaje('Error al cambiar el plan: ' + error.message, 'error');
+        }
+      }
+    </script>
 </body>
 </html>
