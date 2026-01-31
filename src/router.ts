@@ -34,47 +34,6 @@ async function obtenerPagina(archivo: string): Promise<string> {
 }
 
 /**
- * Extrae el contenido main de una página
- */
-function extraerContenidoMain(html: string): string {
-  try {
-    const parser = new DOMParser();
-    const doc = parser.parseFromString(html, 'text/html');
-    
-    // Extraer todo el body y remover header/footer para evitar duplicados
-    console.log('📄 Extrayendo body completo');
-    const body = doc.querySelector('body');
-    if (!body) {
-      console.log('⚠️ No encontré body, devolviendo HTML completo');
-      return html;
-    }
-    
-    // Clonar para no modificar el original
-    const bodyCopy = body.cloneNode(true) as HTMLElement;
-    
-    // Remover elementos que no queremos mostrar (header, footer, etc)
-    const header = bodyCopy.querySelector('header');
-    const footer = bodyCopy.querySelector('footer');
-    
-    if (header) {
-      console.log('🗑️ Removiendo header duplicado');
-      header.remove();
-    }
-    if (footer) {
-      console.log('🗑️ Removiendo footer duplicado');
-      footer.remove();
-    }
-    
-    const content = bodyCopy.innerHTML;
-    console.log('✅ Body extraído, longitud:', content.length);
-    return content;
-  } catch (error) {
-    console.error('❌ Error extrayendo contenido:', error);
-    return '<p>Error al procesar la página</p>';
-  }
-}
-
-/**
  * Reinicializa scripts después de cargar contenido
  */
 async function reinicializarPagina() {
@@ -117,12 +76,24 @@ async function mostrarRuta(ruta: string) {
     const html = await obtenerPagina(archivo);
     console.log('✅ HTML obtenido, longitud:', html.length);
     
-    const contenido = extraerContenidoMain(html);
-    console.log('📋 Contenido extraído, longitud:', contenido.length);
-
-    // Mostrar contenido
-    contenedorPrincipal.innerHTML = contenido;
-    console.log('✅ Contenido insertado en el DOM');
+    // Parsear el HTML
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(html, 'text/html');
+    
+    // Buscar el main en la página cargada
+    const mainPagina = doc.querySelector('main');
+    if (mainPagina) {
+      console.log('✅ main encontrado en la página cargada');
+      const contenido = mainPagina.innerHTML;
+      console.log('📋 Contenido extraído, longitud:', contenido.length);
+      
+      // Mostrar contenido
+      contenedorPrincipal.innerHTML = contenido;
+      console.log('✅ Contenido insertado en el DOM');
+    } else {
+      console.warn('⚠️ No hay main en la página cargada');
+      contenedorPrincipal.innerHTML = '<p>Página cargada pero sin contenido principal</p>';
+    }
     
     // Reinicializar componentes
     await reinicializarPagina();
