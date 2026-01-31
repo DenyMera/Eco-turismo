@@ -44,15 +44,21 @@ function extraerContenidoMain(html: string): string {
     // Buscar elemento main
     let main = doc.querySelector('main');
     if (main) {
-      console.log('✅ main encontrado');
+      console.log('✅ main encontrado, extrayendo solo main');
       return main.innerHTML;
     }
     
-    // Si no hay main, buscar body
-    console.log('⚠️ No encontré main, buscando body');
+    // Si no hay main, extraer todo el body (para páginas que no usan main)
+    console.log('⚠️ No encontré main, extrayendo body completo');
     const body = doc.querySelector('body');
     if (body) {
-      return body.innerHTML;
+      // Remover header y footer si existen, mantener solo el contenido
+      const bodyCopy = body.cloneNode(true) as HTMLElement;
+      const header = bodyCopy.querySelector('header');
+      const footer = bodyCopy.querySelector('footer');
+      if (header) header.remove();
+      if (footer) footer.remove();
+      return bodyCopy.innerHTML;
     }
     
     // Si no hay body, devolver todo el HTML
