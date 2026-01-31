@@ -26,20 +26,27 @@ export function navegarA(ruta: string) {
 function inicializarInterceptoresEnlaces() {
   console.log('🔗 Agregando event listener para clics...');
   
+  // Listener global para VER TODOS los clics
   document.addEventListener('click', (event) => {
-    console.log('🖱️ Clic detectado en:', event.target);
+    console.log('🖱️ CLIC GLOBAL:', {
+      target: event.target,
+      href: (event.target as any)?.href,
+      tagName: (event.target as any)?.tagName,
+    });
+  }, true);
+  
+  // Listener específico para enlaces
+  document.addEventListener('click', (event) => {
     const link = (event.target as HTMLElement).closest('a');
     
     if (!link) {
-      console.log('❌ No es un enlace');
       return;
     }
 
     const href = link.getAttribute('href');
-    console.log('🔗 href encontrado:', href);
+    console.log('🔗 Enlace encontrado, href:', href);
     
     if (!href) {
-      console.log('❌ Sin href');
       return;
     }
 
@@ -51,16 +58,15 @@ function inicializarInterceptoresEnlaces() {
         return;
       }
       
-      console.log('✅ Previniendo navegación por defecto');
+      console.log('✅ Previniendo navegación por defecto para:', href);
       event.preventDefault();
-      console.log('✅ Llamando a navegarA()');
+      event.stopPropagation();
+      console.log('🧭 Llamando a navegarA()');
       navegarA(href);
-    } else {
-      console.log('⏭️ Enlace externo, ignorando');
     }
-  }, true); // Usar capture phase para asegurar que se ejecute primero
+  }, true); // Usar capture phase
   
-  console.log('✅ Event listener agregado correctamente');
+  console.log('✅ Event listeners agregados');
 }
 
 /**
