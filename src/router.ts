@@ -37,10 +37,31 @@ async function obtenerPagina(archivo: string): Promise<string> {
  * Extrae el contenido main de una página
  */
 function extraerContenidoMain(html: string): string {
-  const parser = new DOMParser();
-  const doc = parser.parseFromString(html, 'text/html');
-  const main = doc.querySelector('main');
-  return main ? main.innerHTML : html;
+  try {
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(html, 'text/html');
+    
+    // Buscar elemento main
+    let main = doc.querySelector('main');
+    if (main) {
+      console.log('✅ main encontrado');
+      return main.innerHTML;
+    }
+    
+    // Si no hay main, buscar body
+    console.log('⚠️ No encontré main, buscando body');
+    const body = doc.querySelector('body');
+    if (body) {
+      return body.innerHTML;
+    }
+    
+    // Si no hay body, devolver todo el HTML
+    console.log('⚠️ No encontré body, devolviendo HTML completo');
+    return html;
+  } catch (error) {
+    console.error('❌ Error extrayendo contenido:', error);
+    return '<p>Error al procesar la página</p>';
+  }
 }
 
 /**
@@ -81,21 +102,27 @@ async function mostrarRuta(ruta: string) {
   // Mostrar spinner de carga
   contenedorPrincipal.innerHTML = '<div style="text-align: center; padding: 20px;">Cargando...</div>';
 
-  // Obtener HTML
-  const html = await obtenerPagina(archivo);
-  console.log('✅ HTML obtenido, longitud:', html.length);
-  
-  const contenido = extraerContenidoMain(html);
-  console.log('📋 Contenido extraído, longitud:', contenido.length);
+  try {
+    // Obtener HTML
+    const html = await obtenerPagina(archivo);
+    console.log('✅ HTML obtenido, longitud:', html.length);
+    
+    const contenido = extraerContenidoMain(html);
+    console.log('📋 Contenido extraído, longitud:', contenido.length);
 
-  // Mostrar contenido
-  contenedorPrincipal.innerHTML = contenido;
-  
-  // Reinicializar componentes
-  await reinicializarPagina();
+    // Mostrar contenido
+    contenedorPrincipal.innerHTML = contenido;
+    console.log('✅ Contenido insertado en el DOM');
+    
+    // Reinicializar componentes
+    await reinicializarPagina();
 
-  // Scroll al inicio
-  window.scrollTo(0, 0);
+    // Scroll al inicio
+    window.scrollTo(0, 0);
+  } catch (error) {
+    console.error('❌ Error en mostrarRuta:', error);
+    contenedorPrincipal.innerHTML = '<p style="color: red;">Error al cargar la página</p>';
+  }
 }
 
 /**
