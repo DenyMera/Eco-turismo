@@ -41,29 +41,34 @@ function extraerContenidoMain(html: string): string {
     const parser = new DOMParser();
     const doc = parser.parseFromString(html, 'text/html');
     
-    // Buscar elemento main
-    let main = doc.querySelector('main');
-    if (main) {
-      console.log('✅ main encontrado, extrayendo solo main');
-      return main.innerHTML;
-    }
-    
-    // Si no hay main, extraer todo el body (para páginas que no usan main)
-    console.log('⚠️ No encontré main, extrayendo body completo');
+    // Extraer todo el body y remover header/footer para evitar duplicados
+    console.log('📄 Extrayendo body completo');
     const body = doc.querySelector('body');
-    if (body) {
-      // Remover header y footer si existen, mantener solo el contenido
-      const bodyCopy = body.cloneNode(true) as HTMLElement;
-      const header = bodyCopy.querySelector('header');
-      const footer = bodyCopy.querySelector('footer');
-      if (header) header.remove();
-      if (footer) footer.remove();
-      return bodyCopy.innerHTML;
+    if (!body) {
+      console.log('⚠️ No encontré body, devolviendo HTML completo');
+      return html;
     }
     
-    // Si no hay body, devolver todo el HTML
-    console.log('⚠️ No encontré body, devolviendo HTML completo');
-    return html;
+    // Clonar para no modificar el original
+    const bodyCopy = body.cloneNode(true) as HTMLElement;
+    
+    // Remover elementos que no queremos mostrar (header, footer, etc)
+    const header = bodyCopy.querySelector('header');
+    const footer = bodyCopy.querySelector('footer');
+    const nav = bodyCopy.querySelector('nav');
+    
+    if (header) {
+      console.log('🗑️ Removiendo header duplicado');
+      header.remove();
+    }
+    if (footer) {
+      console.log('🗑️ Removiendo footer duplicado');
+      footer.remove();
+    }
+    
+    const content = bodyCopy.innerHTML;
+    console.log('✅ Body extraído, longitud:', content.length);
+    return content;
   } catch (error) {
     console.error('❌ Error extrayendo contenido:', error);
     return '<p>Error al procesar la página</p>';
