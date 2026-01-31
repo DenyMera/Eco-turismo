@@ -24,24 +24,43 @@ export function navegarA(ruta: string) {
  * Intercepta clics en enlaces
  */
 function inicializarInterceptoresEnlaces() {
+  console.log('🔗 Agregando event listener para clics...');
+  
   document.addEventListener('click', (event) => {
+    console.log('🖱️ Clic detectado en:', event.target);
     const link = (event.target as HTMLElement).closest('a');
-    if (!link) return;
+    
+    if (!link) {
+      console.log('❌ No es un enlace');
+      return;
+    }
 
     const href = link.getAttribute('href');
-    if (!href) return;
+    console.log('🔗 href encontrado:', href);
+    
+    if (!href) {
+      console.log('❌ Sin href');
+      return;
+    }
 
     // Si es un enlace interno
     if (href.startsWith('/') && !href.includes('://')) {
       // Para enlaces con # (anchors) o términos especiales, permitir navegación normal
       if (href.includes('#') || href.includes('?')) {
+        console.log('⏭️ Enlace con # o ?, ignorando');
         return;
       }
       
+      console.log('✅ Previniendo navegación por defecto');
       event.preventDefault();
+      console.log('✅ Llamando a navegarA()');
       navegarA(href);
+    } else {
+      console.log('⏭️ Enlace externo, ignorando');
     }
-  });
+  }, true); // Usar capture phase para asegurar que se ejecute primero
+  
+  console.log('✅ Event listener agregado correctamente');
 }
 
 /**
@@ -49,7 +68,19 @@ function inicializarInterceptoresEnlaces() {
  */
 export function inicializarRouter() {
   console.log('🚀 Inicializando router...');
-  inicializarInterceptoresEnlaces();
+  
+  // Esperar a que el DOM esté completamente listo
+  if (document.readyState === 'loading') {
+    console.log('⏳ DOM todavía cargando, esperando...');
+    document.addEventListener('DOMContentLoaded', () => {
+      console.log('📄 DOMContentLoaded disparado');
+      inicializarInterceptoresEnlaces();
+    });
+  } else {
+    console.log('📄 DOM ya cargado');
+    inicializarInterceptoresEnlaces();
+  }
+  
   console.log('✅ Router inicializado');
 }
 
